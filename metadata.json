@@ -1,0 +1,6 @@
+{
+  "name": "Kafe 78 — Modern POS & Restaurant Management",
+  "description": "Sistem kasir dan operasional kafe realtime modern multi-role (Waiter, Dapur/KDS, Antar, Kasir, Stok FIFO, Laporan, Owner) yang rapi, cepat, dan user-friendly.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
