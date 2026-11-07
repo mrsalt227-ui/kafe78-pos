@@ -3,23 +3,16 @@ import {
   BellRing,
   Check,
   CheckCircle2,
-  ChefHat,
   ClipboardCheck,
   Clock,
-  Loader2,
   Utensils,
-  Wallet,
-  X,
 } from 'lucide-react';
 import { MenuItem, Order, formatRupiah } from '../utils/pos';
 import {
   CALLS_PATH,
-  CLAIMS_PATH,
   CALL_REASON_LABEL,
-  PaymentClaim,
   WaiterCall,
   resolveWaiterCall,
-  updateClaimStatus,
   useRemoteList,
 } from '../lib/customerOrdering';
 
@@ -32,33 +25,29 @@ interface CustomerServiceModuleProps {
   soundEnabled: boolean;
 }
 
-type Tab = 'approval' | 'calls' | 'payments';
+type Tab = 'approval' | 'calls';
 
 export const CustomerServiceModule: React.FC<CustomerServiceModuleProps> = ({
   orders,
   menu,
   onApproveOrder,
   onRejectOrder,
-  onSettleSession,
 }) => {
   const [tab, setTab] = useState<Tab>('approval');
   const [rejecting, setRejecting] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState('');
 
   const { items: calls } = useRemoteList<WaiterCall>(CALLS_PATH);
-  const { items: claims } = useRemoteList<PaymentClaim>(CLAIMS_PATH);
 
   const pendingApprovals = orders.filter((o) => o.status === 'menunggu_approval');
   const openCalls = calls.filter((c) => c.status === 'open');
-  const pendingClaims = claims.filter((c) => c.status === 'pending');
 
   const tabs = useMemo(
     () => [
       { id: 'approval' as Tab, label: 'Persetujuan', count: pendingApprovals.length, Icon: ClipboardCheck },
       { id: 'calls' as Tab, label: 'Panggilan', count: openCalls.length, Icon: BellRing },
-      { id: 'payments' as Tab, label: 'Pembayaran', count: pendingClaims.length, Icon: Wallet },
     ],
-    [pendingApprovals.length, openCalls.length, pendingClaims.length]
+    [pendingApprovals.length, openCalls.length]
   );
 
   const menuMap = useMemo(() => {
@@ -236,85 +225,6 @@ export const CustomerServiceModule: React.FC<CustomerServiceModuleProps> = ({
         </div>
       )}
 
-      {tab === 'payments' && (
-        <div className="space-y-2.5">
-          {pendingClaims.length === 0 && (
-            <div className="text-center py-14 bg-white rounded-2xl border border-[#E5E5EA]">
-              <Wallet className="w-8 h-8 text-[#C7C7CC] mx-auto mb-2" />
-              <p className="text-sm text-[#8E8E93]">Tidak ada klaim pembayaran.</p>
-            </div>
-          )}
-
-          {pendingClaims.map((claim) => {
-            const sessionOrders = orders.filter(
-              (o) => o.sessionId === claim.sessionId && o.status !== 'ditolak'
-            );
-            return (
-              <div key={claim._key} className="bg-white rounded-2xl border border-[#E5E5EA] p-3.5">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-bold">{claim.tableName}</p>
-                    <p className="text-[11px] text-[#8E8E93] mt-0.5">
-                      {claim.method} · {sessionOrders.length} pesanan ·{' '}
-                      {new Date(claim.createdAt).toLocaleTimeString('id-ID', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </p>
-                  </div>
-                  <p className="text-sm font-bold">{formatRupiah(claim.amount)}</p>
-                </div>
-                <div className="flex gap-2 mt-3">
-                  <button
-                    onClick={async () => {
-                      await updateClaimStatus(claim._key, 'verified');
-                      onSettleSession(claim.sessionId);
-                    }}
-                    className="flex-1 py-2 rounded-lg bg-[#34C759] text-white text-xs font-semibold flex items-center justify-center gap-1.5"
-                  >
-                    <Check className="w-3.5 h-3.5" /> Verifikasi & lunasi meja
-                  </button>
-                  <button
-                    onClick={() => updateClaimStatus(claim._key, 'rejected')}
-                    className="px-3 py-2 rounded-lg bg-[#FFEBEB] text-[#FF3B30] text-xs font-semibold flex items-center gap-1"
-                  >
-                    <X className="w-3.5 h-3.5" /> Tolak
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-
-          <div className="mt-4 bg-white rounded-2xl border border-[#E5E5EA] p-3.5">
-            <p className="text-xs font-semibold text-[#3A3A3C] mb-2 flex items-center gap-1.5">
-              <ChefHat className="w-3.5 h-3.5 text-[#8E8E93]" /> Tutup meja tanpa klaim (bayar di kasir)
-            </p>
-            <div className="space-y-2">
-              {Array.from(new Set(orders.filter((o) => o.sessionId && o.paymentStatus === 'unpaid').map((o) => o.sessionId as string))).map(
-                (sessionId) => {
-                  const sessionOrders = orders.filter((o) => o.sessionId === sessionId);
-                  const total = sessionOrders
-                    .filter((o) => o.status !== 'ditolak')
-                    .reduce((sum, o) => sum + o.total, 0);
-                  return (
-                    <div key={sessionId} className="flex items-center justify-between gap-2">
-                      <span className="text-xs text-[#3A3A3C]">
-                        {sessionOrders[0]?.meja || 'Meja'} · {formatRupiah(total)}
-                      </span>
-                      <button
-                        onClick={() => onSettleSession(sessionId)}
-                        className="px-3 py-1.5 rounded-lg bg-[#F2F2F7] text-[#1C1C1E] text-[11px] font-semibold"
-                      >
-                        Lunasi & tutup
-                      </button>
-                    </div>
-                  );
-                }
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
