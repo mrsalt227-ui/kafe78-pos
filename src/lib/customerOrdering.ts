@@ -1,7 +1,7 @@
-import { Database, get, onValue, push, ref, remove, set, update } from 'firebase/database';
+import { Database, get, onValue, push, ref, remove, runTransaction, set, update } from 'firebase/database';
 import { useEffect, useState } from 'react';
 import { BASE_PATH, initFirebase, sanitizeForCloud } from './firebase';
-import { MenuItem, Order, StockBatch, deductFifoStock, generateOrderId } from '../utils/pos';
+import { MenuItem, Order, StockBatch, deductFifoStock } from '../utils/pos';
 
 export const TABLES_PATH = `${BASE_PATH}/tables`;
 export const SESSIONS_PATH = `${BASE_PATH}/sessions`;
@@ -95,6 +95,24 @@ export async function withDb<T>(fn: (db: Database) => Promise<T>): Promise<T> {
   const client = await initFirebase();
   if (!client) throw new Error('Firebase belum tersambung. Periksa konfigurasi cloud.');
   return fn(client.db);
+}
+
+/**
+ * Menambahkan satu order baru ke daftar order di Firebase secara atomic,
+ * aman dipakai bersamaan dari Waiter maupun Customer QR tanpa risiko
+ * saling menimpa (race condition) atau duplikat.
+ */
+export async function pushOrderAtomic(order: Order): Promise<void> {
+  await withDb(async (db) => {
+    const ordersRef = ref(db, ORDERS_PATH);
+    await runTransaction(ordersRef, (currentData) => {
+      const existing = toList<Order>(currentData).map(({ _key, ...o }) => o as Order);
+      if (existing.some((o) => o.id === order.id)) {
+        return currentData;
+      }
+      return sanitizeForCloud([order, ...existing]);
+    });
+  });
 }
 
 function toList<T>(value: unknown): (T & { _key: string })[] {
@@ -287,11 +305,8 @@ export async function submitCustomerOrder({
     const tax = Math.round(subtotal * 0.1);
     const total = subtotal + tax;
 
-    const ordersSnap = await get(ref(db, ORDERS_PATH));
-    const existing = toList<Order>(ordersSnap.val()).map(({ _key, ...o }) => o as Order);
-
     const order: Order = {
-      id: generateOrderId(existing.map((o) => o.id)),
+      id: `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`,
       meja: table.name,
       items,
       subtotal,
@@ -307,7 +322,9 @@ export async function submitCustomerOrder({
       tableId: table.id,
     };
 
-    await set(ref(db, ORDERS_PATH), sanitizeForCloud([order, ...existing]));
+    // Pakai transaction (bukan get-lalu-set) supaya aman kalau Waiter
+    // sedang menulis order lain ke path yang sama secara bersamaan.
+    await pushOrderAtomic(order);
 
     if (approvalMode === 'auto_approve') {
       const nextMenu = menu.map((m) => {
@@ -316,20 +333,15 @@ export async function submitCustomerOrder({
       });
       await set(ref(db, MENU_PATH), sanitizeForCloud(nextMenu));
 
-      // Ikuti mode stok POS: jangan potong batch FIFO kalau kasir memakai mode atomic.
-      const stokModeSnap = await get(ref(db, `${BASE_PATH}/settings/stok_mode`));
-      const stokMode = stokModeSnap.exists() ? String(stokModeSnap.val()) : 'fifo';
-      if (stokMode !== 'atomic') {
-        const batchesSnap = await get(ref(db, BATCHES_PATH));
-        let batches = toList<StockBatch>(batchesSnap.val()).map(({ _key, ...b }) => b as StockBatch);
-        items.forEach((line) => {
-          const menuBatches = batches.filter((b) => b.menuId === line.id);
-          const others = batches.filter((b) => b.menuId !== line.id);
-          const { remainingBatches } = deductFifoStock(menuBatches, line.qty);
-          batches = [...others, ...remainingBatches];
-        });
-        await set(ref(db, BATCHES_PATH), sanitizeForCloud(batches));
-      }
+      const batchesSnap = await get(ref(db, BATCHES_PATH));
+      let batches = toList<StockBatch>(batchesSnap.val()).map(({ _key, ...b }) => b as StockBatch);
+      items.forEach((line) => {
+        const menuBatches = batches.filter((b) => b.menuId === line.id);
+        const others = batches.filter((b) => b.menuId !== line.id);
+        const { remainingBatches } = deductFifoStock(menuBatches, line.qty);
+        batches = [...others, ...remainingBatches];
+      });
+      await set(ref(db, BATCHES_PATH), sanitizeForCloud(batches));
     }
 
     const chatSnap = await get(ref(db, CHAT_PATH));
@@ -451,7 +463,7 @@ export async function deleteCall(callId: string): Promise<void> {
 }
 
 export function customerUrl(token: string): string {
-  const customerOrigin = (import.meta.env.VITE_CUSTOMER_APP_URL || '').trim().replace(/\/+$/, '');
+  const customerOrigin = (import.meta.env.VITE_CUSTOMER_APP_URL || '').trim();
   const base = customerOrigin || window.location.origin;
   return `${base}/?t=${encodeURIComponent(token)}`;
 }
