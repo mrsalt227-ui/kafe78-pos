@@ -145,7 +145,9 @@ export default function App() {
     return {
       dapur: orders.filter((o) => o.status === 'dapur').length,
       antar: orders.filter((o) => o.status === 'siap_antar').length,
-      kasir: orders.filter((o) => o.paymentStatus === 'unpaid').length,
+      kasir: orders.filter(
+    (o) => o.paymentStatus === 'unpaid' && (o.status === 'diantar' || o.status === 'selesai')
+  ).length,
       stokMenipis: menu.filter((m) => m.stok <= 15).length,
       layanan: pendingApprovals + openCalls + pendingClaims,
     };
