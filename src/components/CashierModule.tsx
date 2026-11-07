@@ -7,10 +7,19 @@ import {
   CheckCircle2, 
   Percent, 
   Copy,
-  Printer
+  Printer,
+  Wallet,
+  Check,
+  X,
 } from 'lucide-react';
 import { Order, formatRupiah, calculateChange } from '../utils/pos';
 import { soundEffects } from '../utils/audio';
+import {
+  CLAIMS_PATH,
+  PaymentClaim,
+  updateClaimStatus,
+  useRemoteList,
+} from '../lib/customerOrdering';
 
 interface CashierModuleProps {
   orders: Order[];
@@ -21,22 +30,20 @@ interface CashierModuleProps {
     change: number,
     discountAmount: number
   ) => void;
+  onSettleSession: (sessionId: string) => void;
   soundEnabled: boolean;
 }
 
 export const CashierModule: React.FC<CashierModuleProps> = ({
   orders,
   onProcessPayment,
+  onSettleSession,
   soundEnabled,
 }) => {
+  const { items: claims } = useRemoteList<PaymentClaim>(CLAIMS_PATH);
+  const pendingClaims = claims.filter((c) => c.status === 'pending');
   const unpaidOrders = useMemo(() => {
-    // Pesanan yang ditolak/dibatalkan bukan tagihan aktif.
-    return orders.filter(
-      (o) =>
-        o.paymentStatus === 'unpaid' &&
-        o.status !== 'ditolak' &&
-        o.status !== 'dibatalkan'
-    );
+    return orders.filter((o) => o.paymentStatus === 'unpaid');
   }, [orders]);
 
   const [selectedOrderId, setSelectedOrderId] = useState<string>(
@@ -108,6 +115,106 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
           </p>
         </div>
       </div>
+
+      {/* Klaim Pembayaran Online (dari Customer QR) */}
+      {pendingClaims.length > 0 && (
+        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs space-y-2.5">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg bg-[#EAF4FF] text-[#007AFF] flex items-center justify-center shrink-0">
+              <Wallet className="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-xs text-[#1C1C1E]">Klaim Pembayaran Online</h3>
+              <p className="text-[11px] text-[#8E8E93]">
+                {pendingClaims.length} klaim menunggu verifikasi
+              </p>
+            </div>
+          </div>
+
+          {pendingClaims.map((claim) => {
+            const sessionOrders = orders.filter(
+              (o) => o.sessionId === claim.sessionId && o.status !== 'ditolak'
+            );
+            return (
+              <div key={claim._key} className="bg-[#F2F2F7] rounded-xl p-3 border border-[#E5E5EA]/60">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-[#1C1C1E]">{claim.tableName}</p>
+                    <p className="text-[10px] text-[#8E8E93] mt-0.5">
+                      {claim.method} · {sessionOrders.length} pesanan ·{' '}
+                      {new Date(claim.createdAt).toLocaleTimeString('id-ID', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </p>
+                  </div>
+                  <p className="text-xs font-bold text-[#1C1C1E]">{formatRupiah(claim.amount)}</p>
+                </div>
+                <div className="flex gap-2 mt-2.5">
+                  <button
+                    onClick={async () => {
+                      if (soundEnabled) soundEffects.cash();
+                      await updateClaimStatus(claim._key, 'verified');
+                      onSettleSession(claim.sessionId);
+                    }}
+                    className="flex-1 py-1.5 rounded-lg bg-[#34C759] text-white text-[11px] font-semibold flex items-center justify-center gap-1"
+                  >
+                    <Check className="w-3 h-3" /> Verifikasi & lunasi meja
+                  </button>
+                  <button
+                    onClick={() => updateClaimStatus(claim._key, 'rejected')}
+                    className="px-3 py-1.5 rounded-lg bg-[#FFEBEB] text-[#FF3B30] text-[11px] font-semibold flex items-center gap-1"
+                  >
+                    <X className="w-3 h-3" /> Tolak
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Tutup sesi meja Customer QR tanpa klaim online (bayar langsung di kasir) */}
+      {Array.from(
+        new Set(
+          orders
+            .filter((o) => o.sessionId && o.paymentStatus === 'unpaid')
+            .map((o) => o.sessionId as string)
+        )
+      ).length > 0 && (
+        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs space-y-2">
+          <p className="text-xs font-semibold text-[#3A3A3C] flex items-center gap-1.5">
+            <Wallet className="w-3.5 h-3.5 text-[#8E8E93]" /> Tutup sesi meja QR (bayar di kasir)
+          </p>
+          <div className="space-y-2">
+            {Array.from(
+              new Set(
+                orders
+                  .filter((o) => o.sessionId && o.paymentStatus === 'unpaid')
+                  .map((o) => o.sessionId as string)
+              )
+            ).map((sessionId) => {
+              const sessionOrders = orders.filter((o) => o.sessionId === sessionId);
+              const total = sessionOrders
+                .filter((o) => o.status !== 'ditolak')
+                .reduce((sum, o) => sum + o.total, 0);
+              return (
+                <div key={sessionId} className="flex items-center justify-between gap-2">
+                  <span className="text-xs text-[#3A3A3C]">
+                    {sessionOrders[0]?.meja || 'Meja'} · {formatRupiah(total)}
+                  </span>
+                  <button
+                    onClick={() => onSettleSession(sessionId)}
+                    className="px-3 py-1.5 rounded-lg bg-[#F2F2F7] text-[#1C1C1E] text-[11px] font-semibold"
+                  >
+                    Lunasi & tutup
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {unpaidOrders.length === 0 ? (
         <div className="bg-white rounded-2xl border border-[#E5E5EA] p-12 text-center text-[#8E8E93] space-y-2">
