@@ -56,7 +56,7 @@ const STATUS_LABEL: Record<string, string> = {
   menunggu_approval: 'Menunggu konfirmasi kasir',
   dapur: 'Sedang disiapkan',
   siap_antar: 'Siap diantar',
-  diantar: 'Sedang diantar',
+  diantar: 'Sudah diantar',
   selesai: 'Selesai',
   ditolak: 'Ditolak kasir',
   dibatalkan: 'Dibatalkan',
