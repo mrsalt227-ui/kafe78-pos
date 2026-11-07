@@ -25,7 +25,7 @@ import {
   RoleType,
   ChatMessage,
 } from './data/seedData';
-import { MenuItem, Order, StockBatch, CartItem, deductFifoStock, generateOrderId } from './utils/pos';
+import { MenuItem, Order, StockBatch, CartItem, deductFifoStock } from './utils/pos';
 import { useCloudState, useCloudStatus } from './hooks/useCloudState';
 import {
   CALLS_PATH,
@@ -36,6 +36,7 @@ import {
   WaiterCall,
   closeSession,
   ensureTablesSeeded,
+  pushOrderAtomic,
   useRemoteList,
 } from './lib/customerOrdering';
 
@@ -130,13 +131,7 @@ export default function App() {
   const occupiedTables = useMemo(() => {
     const list: string[] = [];
     orders.forEach((o) => {
-      // Pesanan yang ditolak/dibatalkan tidak boleh membuat meja terlihat terisi.
-      if (
-        o.status !== 'selesai' &&
-        o.status !== 'ditolak' &&
-        o.status !== 'dibatalkan' &&
-        !list.includes(o.meja)
-      ) {
+      if (o.status !== 'selesai' && !list.includes(o.meja)) {
         list.push(o.meja);
       }
     });
@@ -144,16 +139,13 @@ export default function App() {
   }, [orders]);
 
   const navCounts = useMemo(() => {
-    const billableOrders = orders.filter(
-      (o) => o.status !== 'ditolak' && o.status !== 'dibatalkan'
-    );
     const pendingApprovals = orders.filter((o) => o.status === 'menunggu_approval').length;
     const openCalls = waiterCalls.filter((c) => c.status === 'open').length;
     const pendingClaims = paymentClaims.filter((c) => c.status === 'pending').length;
     return {
       dapur: orders.filter((o) => o.status === 'dapur').length,
       antar: orders.filter((o) => o.status === 'siap_antar').length,
-      kasir: billableOrders.filter((o) => o.paymentStatus === 'unpaid').length,
+      kasir: orders.filter((o) => o.paymentStatus === 'unpaid').length,
       stokMenipis: menu.filter((m) => m.stok <= 15).length,
       layanan: pendingApprovals + openCalls + pendingClaims,
     };
@@ -161,33 +153,17 @@ export default function App() {
 
   // Handlers: Waiter Sends Order
   const handleSendOrder = (table: string, cartItems: CartItem[]) => {
-    // Validasi stok terakhir sebelum pesanan dikirim ke dapur.
-    const oversold = cartItems.find((ci) => {
-      const item = menu.find((m) => m.id === ci.id);
-      return !item || item.stok < ci.qty;
-    });
-    if (oversold) {
-      const item = menu.find((m) => m.id === oversold.id);
-      alert(
-        item
-          ? `Stok ${item.n} tinggal ${item.stok}, tidak cukup untuk ${oversold.qty} porsi.`
-          : 'Sebagian menu sudah tidak tersedia.'
-      );
-      return;
-    }
-
     const subtotal = cartItems.reduce((sum, it) => sum + it.h * it.qty, 0);
     const tax = Math.round(subtotal * 0.1);
     const total = subtotal + tax;
 
     const newOrder: Order = {
-      id: generateOrderId([...orders.map((o) => o.id), ...completedOrders.map((o) => o.id)]),
+      id: `ORD-${Date.now()}-${Math.floor(1000 + Math.random() * 9000)}`,
       meja: table,
       items: cartItems.map((c) => ({
         id: c.id,
         n: c.n,
         h: c.h,
-        costPrice: c.costPrice,
         qty: c.qty,
         note: c.note,
         done: false,
@@ -230,7 +206,13 @@ export default function App() {
       });
     }
 
+    // Update UI lokal langsung (responsif), lalu tulis ke Firebase secara
+    // atomic supaya aman walau ada order lain (misal dari Customer QR)
+    // masuk di waktu yang nyaris bersamaan.
     setOrders((prev) => [newOrder, ...prev]);
+    pushOrderAtomic(newOrder).catch((err) => {
+      console.warn('[order] gagal menyimpan order waiter ke cloud:', err?.message);
+    });
 
     // Push system chat
     setChatMessages((prev) => [
@@ -311,8 +293,6 @@ export default function App() {
   ) => {
     const target = orders.find((o) => o.id === orderId);
     if (!target) return;
-    // Jangan proses pembayaran untuk pesanan yang sudah ditolak/dibatalkan.
-    if (target.status === 'ditolak' || target.status === 'dibatalkan') return;
 
     const paidOrder: Order = {
       ...target,
@@ -350,20 +330,6 @@ export default function App() {
   const handleApproveCustomerOrder = (orderId: string) => {
     const target = orders.find((o) => o.id === orderId);
     if (!target) return;
-
-    const shortage = target.items.find((it) => {
-      const item = menu.find((m) => m.id === it.id);
-      return !item || item.stok < it.qty;
-    });
-    if (shortage) {
-      const item = menu.find((m) => m.id === shortage.id);
-      alert(
-        item
-          ? `Stok ${item.n} tinggal ${item.stok}, tidak cukup untuk ${shortage.qty} porsi. Tolak pesanan ini atau tambah stok dulu.`
-          : 'Sebagian menu pada pesanan ini sudah tidak tersedia. Tolak pesanan ini.'
-      );
-      return;
-    }
 
     setMenu((prevMenu) =>
       prevMenu.map((m) => {
@@ -559,6 +525,7 @@ export default function App() {
           <CashierModule
             orders={orders}
             onProcessPayment={handleProcessPayment}
+            onSettleSession={handleSettleSession}
             soundEnabled={soundEnabled}
           />
         )}
