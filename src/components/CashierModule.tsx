@@ -43,7 +43,12 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
   const { items: claims } = useRemoteList<PaymentClaim>(CLAIMS_PATH);
   const pendingClaims = claims.filter((c) => c.status === 'pending');
   const unpaidOrders = useMemo(() => {
-    return orders.filter((o) => o.paymentStatus === 'unpaid');
+    // Hanya tampilkan tagihan untuk pesanan yang sudah diantar (atau selesai).
+    // Pesanan yang masih menunggu approval/di dapur/siap antar belum boleh
+    // ditagih di kasir.
+    return orders.filter(
+      (o) => o.paymentStatus === 'unpaid' && (o.status === 'diantar' || o.status === 'selesai')
+    );
   }, [orders]);
 
   const [selectedOrderId, setSelectedOrderId] = useState<string>(
@@ -174,26 +179,32 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
         </div>
       )}
 
-      {/* Tutup sesi meja Customer QR tanpa klaim online (bayar langsung di kasir) */}
-      {Array.from(
-        new Set(
-          orders
-            .filter((o) => o.sessionId && o.paymentStatus === 'unpaid')
-            .map((o) => o.sessionId as string)
-        )
-      ).length > 0 && (
+      {/* Tutup sesi meja Customer QR tanpa klaim online (bayar langsung di kasir).
+          Hanya muncul kalau SEMUA pesanan aktif di sesi itu sudah diantar/selesai. */}
+      {(() => {
+        const unpaidSessionIds = Array.from(
+          new Set(
+            orders
+              .filter((o) => o.sessionId && o.paymentStatus === 'unpaid')
+              .map((o) => o.sessionId as string)
+          )
+        );
+        const readySessionIds = unpaidSessionIds.filter((sessionId) => {
+          const sessionOrders = orders.filter(
+            (o) => o.sessionId === sessionId && o.status !== 'ditolak' && o.status !== 'dibatalkan'
+          );
+          return (
+            sessionOrders.length > 0 &&
+            sessionOrders.every((o) => o.status === 'diantar' || o.status === 'selesai')
+          );
+        });
+        return readySessionIds.length > 0 && (
         <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs space-y-2">
           <p className="text-xs font-semibold text-[#3A3A3C] flex items-center gap-1.5">
             <Wallet className="w-3.5 h-3.5 text-[#8E8E93]" /> Tutup sesi meja QR (bayar di kasir)
           </p>
           <div className="space-y-2">
-            {Array.from(
-              new Set(
-                orders
-                  .filter((o) => o.sessionId && o.paymentStatus === 'unpaid')
-                  .map((o) => o.sessionId as string)
-              )
-            ).map((sessionId) => {
+            {readySessionIds.map((sessionId) => {
               const sessionOrders = orders.filter((o) => o.sessionId === sessionId);
               const total = sessionOrders
                 .filter((o) => o.status !== 'ditolak')
@@ -214,7 +225,8 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
             })}
           </div>
         </div>
-      )}
+        );
+      })()}
 
       {unpaidOrders.length === 0 ? (
         <div className="bg-white rounded-2xl border border-[#E5E5EA] p-12 text-center text-[#8E8E93] space-y-2">
