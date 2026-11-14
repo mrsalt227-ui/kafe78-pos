@@ -149,7 +149,7 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Pesan iMessage..."
+              placeholder="Ketik pesan..."
               className="flex-1 bg-[#F2F2F7] border border-[#E5E5EA] rounded-full px-4 py-2 text-xs text-[#1C1C1E] placeholder-[#8E8E93] focus:outline-none focus:ring-1 focus:ring-[#007AFF]"
             />
             <button

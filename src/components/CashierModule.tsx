@@ -455,7 +455,7 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                     </div>
                   )}
                   <div className="flex justify-between text-[#636366]">
-                    <span>PB1 (Pajak 10%)</span>
+                    <span>PPN (Pajak 10%)</span>
                     <span className="font-mono text-[#1C1C1E]">{formatRupiah(tax)}</span>
                   </div>
                   <div className="flex justify-between items-baseline pt-2 border-t border-[#F2F2F7] font-bold text-[#1C1C1E]">

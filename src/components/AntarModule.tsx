@@ -39,7 +39,7 @@ export const AntarModule: React.FC<AntarModuleProps> = ({
           <CheckCircle2 className="w-10 h-10 mx-auto text-[#007AFF]" />
           <h3 className="font-bold text-sm text-[#1C1C1E]">Semua Hidangan Sudah Terantar</h3>
           <p className="text-xs text-[#8E8E93] max-w-sm mx-auto">
-            Tidak ada piring yang menunggu di meja pick-up saat ini.
+            Tidak ada piring yang menunggu di meja pengambilan saat ini.
           </p>
         </div>
       ) : (

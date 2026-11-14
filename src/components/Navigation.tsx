@@ -49,7 +49,7 @@ export const Navigation: React.FC<NavigationProps> = ({
     { id: 'dapur' as NavView, label: 'Dapur', icon: ChefHat, badge: counts.dapur },
     { id: 'antar' as NavView, label: 'Antar', icon: Bike, badge: counts.antar },
     { id: 'kasir' as NavView, label: 'Kasir', icon: Receipt, badge: counts.kasir },
-    { id: 'layanan' as NavView, label: 'Customer', icon: BellRing, badge: counts.layanan },
+    { id: 'layanan' as NavView, label: 'Pelanggan', icon: BellRing, badge: counts.layanan },
     { id: 'meja' as NavView, label: 'Meja & QR', icon: QrCode },
     { id: 'stok' as NavView, label: 'Stok', icon: Package, badge: counts.stokMenipis },
     { id: 'laporan' as NavView, label: 'Laporan', icon: BarChart3 },

@@ -224,7 +224,7 @@ export const WaiterModule: React.FC<WaiterModuleProps> = ({
                 </button>
               ))}
               <span className="text-[11px] text-[#8E8E93] ml-auto hidden sm:inline whitespace-nowrap">
-                {filteredMenu.length} item
+                {filteredMenu.length} menu
               </span>
             </div>
           </div>

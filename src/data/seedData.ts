@@ -29,7 +29,7 @@ export const INITIAL_MENU: MenuItem[] = [
     category: 'Kopi',
     stok: 22,
     icon: '🥤',
-    description: 'Vanilla syrup, steamed milk, espresso drizzle caramel',
+    description: 'Sirup vanilla, susu dikukus, espresso dengan sirup karamel',
   },
   {
     id: 'm4',
@@ -39,7 +39,7 @@ export const INITIAL_MENU: MenuItem[] = [
     category: 'Non-Kopi',
     stok: 18,
     icon: '🍵',
-    description: 'Pure ceremonial matcha Kyoto dengan fresh milk creamy',
+    description: 'Matcha ceremonial Kyoto murni dengan susu segar creamy',
   },
   {
     id: 'm5',
@@ -119,7 +119,7 @@ export const INITIAL_MENU: MenuItem[] = [
     category: 'Dessert',
     stok: 12,
     icon: '🥐',
-    description: 'Pastry renyah butter Prancis dengan taburan roasted almond',
+    description: 'Pastry renyah butter Prancis dengan taburan almond panggang',
   },
 ];
 

@@ -201,9 +201,9 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
   // 2. Payment Method Breakdown (for Donut Chart)
   const paymentBreakdown = useMemo(() => {
     const methods: Record<string, { total: number; count: number; color: string; label: string }> = {
-      Tunai: { total: 0, count: 0, color: '#34C759', label: 'Tunai (Cash)' },
-      QRIS: { total: 0, count: 0, color: '#007AFF', label: 'QRIS Dinamis' },
-      Transfer: { total: 0, count: 0, color: '#5856D6', label: 'Transfer Bank' },
+      Tunai: { total: 0, count: 0, color: '#34C759', label: 'Tunai' },
+      QRIS: { total: 0, count: 0, color: '#007AFF', label: 'QRIS' },
+      Transfer: { total: 0, count: 0, color: '#5856D6', label: 'Transfer' },
     };
 
     filteredOrders.forEach((o) => {
@@ -944,7 +944,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                 Metode Terfavorit
               </span>
               <div className="text-base font-bold text-[#1C1C1E] mt-0.5">
-                QRIS Dinamis
+                QRIS
               </div>
               <span className="text-[11px] text-[#5856D6] font-medium block mt-1">
                 Paling cepat & digemari pelanggan kafe

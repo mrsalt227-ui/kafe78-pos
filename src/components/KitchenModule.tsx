@@ -193,7 +193,7 @@ export const KitchenModule: React.FC<KitchenModuleProps> = ({
                 <div className="mt-4 pt-3 border-t border-[#F2F2F7]">
                   {isReady ? (
                     <div className="py-2.5 px-3 rounded-xl bg-[#E5F1FF] text-[#007AFF] text-xs font-semibold text-center">
-                      Siap Antar · Menunggu Runner
+                      Siap Antar · Menunggu Pengantaran
                     </div>
                   ) : (
                     <button
