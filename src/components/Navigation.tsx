@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { 
   UtensilsCrossed, 
   ChefHat, 
@@ -33,7 +33,6 @@ export const Navigation: React.FC<NavigationProps> = ({
   currentRole,
   counts,
 }) => {
-  // Real role-based tab access matching the original repo
   const allowedViews: Record<RoleType, NavView[]> = {
     waiter: ['waiter', 'antar', 'layanan'],
     dapur: ['dapur'],
@@ -59,11 +58,31 @@ export const Navigation: React.FC<NavigationProps> = ({
   const permittedList = allowedViews[currentRole] || ['waiter'];
   const visibleTabs = allTabs.filter((tab) => permittedList.includes(tab.id));
 
+  const pillRef = useRef<HTMLDivElement>(null);
+  const [indicator, setIndicator] = useState({ left: 0, width: 0 });
+
+  useLayoutEffect(() => {
+    const pill = pillRef.current;
+    if (!pill) return;
+    const active = pill.querySelector<HTMLElement>('[data-active="true"]');
+    if (!active) return;
+    setIndicator({
+      left: active.offsetLeft,
+      width: active.offsetWidth,
+    });
+  }, [currentView, currentRole]);
+
   return (
-    <nav className="bg-[#F2F2F7] px-4 py-2 sticky top-[57px] z-30 overflow-x-auto no-scrollbar">
-      <div className="max-w-7xl mx-auto flex items-center justify-start sm:justify-center">
-        {/* iOS Segmented Control Container */}
-        <div className="bg-[#E5E5EA] p-1 rounded-xl flex items-center gap-1 shadow-inner">
+    <nav className="bg-[#F2F2F7] px-4 py-3 sticky top-0 z-30 -mt-px">
+      <div className="max-w-7xl mx-auto">
+        <div className="nav-pill" ref={pillRef}>
+          <div
+            className="nav-indicator"
+            style={{
+              transform: `translateX(${indicator.left}px)`,
+              width: indicator.width,
+            }}
+          />
           {visibleTabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = currentView === tab.id;
@@ -72,20 +91,15 @@ export const Navigation: React.FC<NavigationProps> = ({
                 key={tab.id}
                 onClick={() => onSelectView(tab.id)}
                 aria-label={`Buka ${tab.label}`}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all select-none cursor-pointer ${
-                  isActive
-                    ? 'bg-white text-[#1C1C1E] font-semibold shadow-xs'
-                    : 'text-[#636366] hover:text-[#1C1C1E] hover:bg-black/5'
+                data-active={isActive ? 'true' : 'false'}
+                className={`nav-pill-item ${
+                  isActive ? 'nav-pill-item-active' : 'nav-pill-item-inactive'
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-[#007AFF]' : 'text-[#8E8E93]'}`} />
+                <Icon className={`w-3.5 h-3.5`} />
                 <span>{tab.label}</span>
                 {typeof tab.badge === 'number' && tab.badge > 0 && (
-                  <span
-                    className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full min-w-4 text-center leading-tight ${
-                      isActive ? 'bg-[#007AFF] text-white' : 'bg-[#8E8E93] text-white'
-                    }`}
-                  >
+                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full min-w-[18px] text-center leading-tight bg-[#8E8E93] text-white">
                     {tab.badge}
                   </span>
                 )}

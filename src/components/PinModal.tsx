@@ -30,7 +30,6 @@ export const PinModal: React.FC<PinModalProps> = ({
     }
   }, [isOpen]);
 
-  // Physical keyboard support
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -104,27 +103,29 @@ export const PinModal: React.FC<PinModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-md">
-      <div className="bg-white rounded-3xl w-full max-w-sm p-6 shadow-2xl space-y-6 border border-[#E5E5EA] animate-in zoom-in-95 duration-150">
+      <div className="bg-white rounded-[32px] w-full max-w-md p-8 shadow-2xl space-y-7 border border-[#E5E5EA] animate-in zoom-in-95 duration-150">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Lock className="w-4 h-4 text-[#007AFF]" />
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-[#5B4FE9]/10 flex items-center justify-center text-[#5B4FE9]">
+              <Lock className="w-4 h-4" />
+            </div>
             <h3 className="font-semibold text-sm text-[#1C1C1E]">Ganti Hak Akses / Kunci</h3>
           </div>
           <button
             onClick={onClose}
             aria-label="Tutup"
-            className="w-7 h-7 rounded-full bg-[#F2F2F7] text-[#636366] hover:text-[#1C1C1E] flex items-center justify-center cursor-pointer"
+            className="w-8 h-8 rounded-full bg-[#F2F2F7] text-[#636366] hover:text-[#1C1C1E] flex items-center justify-center cursor-pointer transition-colors"
           >
             <X className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Passcode Circles (Apple iOS Lockscreen Style) */}
-        <div className="text-center space-y-2">
+        {/* Passcode Circles */}
+        <div className="text-center space-y-3">
           <p className="text-xs text-[#636366]">Masukkan 6-Digit PIN Anda</p>
           <div
-            className={`flex items-center justify-center gap-3.5 py-1 transition-transform ${
+            className={`flex items-center justify-center gap-4 py-1 transition-transform ${
               isShaking ? 'translate-x-1 duration-75 text-[#FF3B30]' : ''
             }`}
           >
@@ -133,7 +134,7 @@ export const PinModal: React.FC<PinModalProps> = ({
               return (
                 <div
                   key={idx}
-                  className={`w-3.5 h-3.5 rounded-full border transition-all ${
+                  className={`w-4 h-4 rounded-full border transition-all ${
                     isFilled
                       ? isShaking
                         ? 'bg-[#FF3B30] border-[#FF3B30]'
@@ -145,18 +146,18 @@ export const PinModal: React.FC<PinModalProps> = ({
             })}
           </div>
 
-          <p className="text-xs text-[#FF3B30] h-4 font-medium">{errorMsg}</p>
+          <p className="text-xs text-[#FF3B30] h-5 font-medium">{errorMsg}</p>
         </div>
 
-        {/* iOS Phone / Passcode Dialpad */}
-        <div className="grid grid-cols-3 gap-3.5 max-w-[240px] mx-auto">
+        {/* Dialpad */}
+        <div className="grid grid-cols-3 gap-3 max-w-[260px] mx-auto">
           {keys.map((k) => (
             <button
               key={k.num}
               onClick={() => handleKeyClick(k.num)}
-              className="w-16 h-16 rounded-full bg-[#F2F2F7] hover:bg-[#E5E5EA] active:bg-[#D1D1D6] flex flex-col items-center justify-center transition-colors mx-auto select-none cursor-pointer"
+              className="w-full h-16 rounded-[20px] bg-[#F2F2F7] hover:bg-[#E5E5EA] active:bg-[#D1D1D6] flex flex-col items-center justify-center transition-colors select-none cursor-pointer"
             >
-              <span className="font-semibold text-xl leading-none text-[#1C1C1E]">{k.num}</span>
+              <span className="font-semibold text-lg leading-none text-[#1C1C1E]">{k.num}</span>
               {k.sub && (
                 <span className="text-[9px] font-semibold text-[#8E8E93] tracking-widest mt-0.5">
                   {k.sub}
@@ -164,24 +165,24 @@ export const PinModal: React.FC<PinModalProps> = ({
               )}
             </button>
           ))}
-          <div className="w-16 h-16"></div>
+          <div className="w-full h-16"></div>
           <button
             onClick={() => handleKeyClick('0')}
-            className="w-16 h-16 rounded-full bg-[#F2F2F7] hover:bg-[#E5E5EA] active:bg-[#D1D1D6] flex flex-col items-center justify-center transition-colors mx-auto select-none cursor-pointer"
+            className="w-full h-16 rounded-[20px] bg-[#F2F2F7] hover:bg-[#E5E5EA] active:bg-[#D1D1D6] flex flex-col items-center justify-center transition-colors select-none cursor-pointer"
           >
-            <span className="font-semibold text-xl leading-none text-[#1C1C1E]">0</span>
+            <span className="font-semibold text-lg leading-none text-[#1C1C1E]">0</span>
           </button>
           <button
             onClick={handleBackspace}
             aria-label="Hapus satu angka"
-            className="w-16 h-16 rounded-full hover:bg-[#F2F2F7] flex items-center justify-center text-[#636366] hover:text-[#1C1C1E] transition-colors mx-auto select-none cursor-pointer"
+            className="w-full h-16 rounded-[20px] hover:bg-[#F2F2F7] flex items-center justify-center text-[#636366] hover:text-[#1C1C1E] transition-colors select-none cursor-pointer"
           >
             <Delete className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="text-center pt-2 border-t border-[#F2F2F7]">
-          <p className="text-[11px] text-[#8E8E93]">
+        <div className="pt-3 border-t border-[#F2F2F7]">
+          <p className="text-center text-[11px] text-[#8E8E93]">
             Sistem otomatis mengarahkan ke tampilan sesuai peran PIN
           </p>
         </div>

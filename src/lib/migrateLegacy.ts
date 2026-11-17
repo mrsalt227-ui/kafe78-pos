@@ -116,7 +116,7 @@ function normalizeLaporan(raw: unknown): Order[] {
         paymentStatus: 'paid',
         paymentMethod: 'Tunai',
         paidAt: ts,
-        cashierName: 'Kasir 78',
+        cashierName: 'Kasir Sontoloyo',
       } as Order;
     })
     .filter((o) => o.items.length > 0 && o.total > 0);

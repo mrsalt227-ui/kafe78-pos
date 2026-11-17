@@ -110,10 +110,10 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({ isOpen, onClose 
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-xs p-0 sm:p-4">
-      <div className="w-full sm:max-w-lg max-h-[92vh] overflow-y-auto bg-[#F2F2F7] sm:rounded-2xl rounded-t-2xl shadow-2xl">
-        <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-[#E5E5EA] px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#007AFF] text-white flex items-center justify-center">
+      <div className="w-full sm:max-w-lg max-h-[92vh] overflow-y-auto bg-[#F2F2F7] sm:rounded-[32px] rounded-t-[32px] shadow-2xl">
+        <div className="sticky top-0 bg-white/90 backdrop-blur-md border-b border-[#E5E5EA] px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-[16px] bg-[#5B4FE9] text-white flex items-center justify-center shadow-sm">
               <Cloud className="w-4 h-4" />
             </div>
             <div>
@@ -124,14 +124,14 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({ isOpen, onClose 
           <button
             onClick={onClose}
             aria-label="Tutup"
-            className="p-2 rounded-lg bg-[#F2F2F7] text-[#8E8E93] hover:text-[#1C1C1E] transition-colors cursor-pointer"
+            className="w-9 h-9 rounded-full bg-[#F2F2F7] text-[#8E8E93] hover:text-[#1C1C1E] flex items-center justify-center cursor-pointer transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="p-4 space-y-4">
-          <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl ${statusMeta.bg}`}>
+        <div className="p-6 space-y-5">
+          <div className={`flex items-center gap-3 px-4 py-3 rounded-[16px] ${statusMeta.bg}`}>
             <statusMeta.Icon className={`w-4 h-4 ${statusMeta.tone}`} />
             <div className="flex-1">
               <p className={`text-xs font-semibold ${statusMeta.tone}`}>{statusMeta.label}</p>
@@ -145,53 +145,57 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({ isOpen, onClose 
           </div>
 
           {envLocked ? (
-            <p className="text-[11px] text-[#8E8E93] bg-white rounded-xl border border-[#E5E5EA] px-3 py-2.5">
-              Konfigurasi dibaca dari environment (<span className="font-mono">VITE_FIREBASE_*</span>) sehingga tidak bisa diubah dari sini.
+            <p className="text-[11px] text-[#8E8E93] bg-white rounded-[16px] border border-[#E5E5EA] px-4 py-3">
+              Konfigurasi dibaca dari environment (<span className="font-mono text-[10px]">VITE_FIREBASE_*</span>) sehingga tidak bisa diubah dari sini.
             </p>
           ) : (
             <>
-              <div className="bg-white rounded-xl border border-[#E5E5EA] p-3 space-y-2">
-                <label className="text-[11px] font-semibold text-[#3A3A3C]">Tempel firebaseConfig (JSON)</label>
+              <div className="bg-white rounded-[16px] border border-[#E5E5EA] p-4 space-y-3">
+                <label className="text-[10px] font-semibold text-[#3A3A3C] uppercase tracking-wide">
+                  Tempel firebaseConfig (JSON)
+                </label>
                 <textarea
                   value={rawJson}
                   onChange={(e) => handlePasteJson(e.target.value)}
                   placeholder={'{\n  "apiKey": "…",\n  "databaseURL": "…",\n  "projectId": "…"\n}'}
                   rows={4}
-                  className="w-full text-[11px] font-mono rounded-lg border border-[#E5E5EA] bg-[#F9F9FB] px-2.5 py-2 text-[#1C1C1E] outline-none focus:border-[#007AFF] resize-y"
+                  className="w-full text-[11px] font-mono rounded-[12px] border border-[#E5E5EA] bg-[#F9F9FB] px-3 py-3 text-[#1C1C1E] outline-none focus:border-[#5B4FE9]/30 focus:ring-1 focus:ring-[#5B4FE9]/20 resize-y"
                 />
               </div>
 
-              <div className="bg-white rounded-xl border border-[#E5E5EA] divide-y divide-[#F2F2F7]">
+              <div className="bg-white rounded-[16px] border border-[#E5E5EA] divide-y divide-[#F2F2F7]">
                 {fields.map((f) => (
-                  <div key={f.key} className="px-3 py-2">
-                    <label className="text-[10px] font-semibold text-[#8E8E93] uppercase tracking-wide">{f.label}</label>
+                  <div key={f.key} className="px-4 py-3">
+                    <label className="text-[10px] font-semibold text-[#8E8E93] uppercase tracking-wide">
+                      {f.label}
+                    </label>
                     <input
                       value={(form[f.key] as string) || ''}
                       onChange={(e) => update(f.key, e.target.value)}
                       placeholder={f.placeholder}
-                      className="w-full mt-0.5 text-xs bg-transparent text-[#1C1C1E] outline-none placeholder:text-[#C7C7CC]"
+                      className="w-full mt-1 text-xs bg-transparent text-[#1C1C1E] outline-none placeholder:text-[#C7C7CC]"
                     />
                   </div>
                 ))}
               </div>
 
               {message && (
-                <p className="flex items-center gap-1.5 text-[11px] text-[#007AFF]">
+                <p className="flex items-center gap-2 text-[11px] text-[#5B4FE9]">
                   <Check className="w-3.5 h-3.5" /> {message}
                 </p>
               )}
 
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <button
                   onClick={handleSave}
-                  className="flex-1 px-3 py-2.5 rounded-xl bg-[#007AFF] text-white text-xs font-semibold hover:bg-[#0066D6] transition-colors cursor-pointer"
+                  className="flex-1 px-4 py-3 rounded-[14px] bg-[#5B4FE9] text-white text-xs font-semibold hover:bg-[#4A3FD8] transition-colors shadow-sm cursor-pointer"
                 >
                   Simpan & Hubungkan
                 </button>
                 {configured && (
                   <button
                     onClick={handleDisconnect}
-                    className="px-3 py-2.5 rounded-xl bg-white border border-[#FF3B30]/30 text-[#FF3B30] text-xs font-semibold hover:bg-[#FFEBEB] transition-colors flex items-center gap-1.5 cursor-pointer"
+                    className="px-4 py-3 rounded-[14px] bg-white border border-[#FF3B30]/30 text-[#FF3B30] text-xs font-semibold hover:bg-[#FFEBEB] transition-colors flex items-center gap-2 cursor-pointer"
                   >
                     <Trash2 className="w-3.5 h-3.5" /> Lepas
                   </button>
@@ -199,7 +203,7 @@ export const CloudSyncModal: React.FC<CloudSyncModalProps> = ({ isOpen, onClose 
               </div>
 
               <p className="text-[10px] leading-relaxed text-[#8E8E93]">
-                Data disinkronkan ke <span className="font-mono">{BASE_PATH}/</span> (master_menu, orders, stok_fifo, laporan,
+                Data disinkronkan ke <span className="font-mono text-[10px]">{BASE_PATH}/</span> (master_menu, orders, stok_fifo, laporan,
                 settings, chat). Pastikan Realtime Database Rules mengizinkan baca/tulis, atau login anonim aktif.
               </p>
             </>

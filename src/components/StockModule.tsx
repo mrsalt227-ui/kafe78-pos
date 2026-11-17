@@ -66,13 +66,13 @@ export const StockModule: React.FC<StockModuleProps> = ({
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs">
         <div>
           <h2 className="font-bold text-base text-[#1C1C1E]">
             Inventaris & Stok
           </h2>
           <p className="text-xs text-[#8E8E93]">
-            {totalStockUnits} total porsi tersedia · Metode: <span className="font-mono uppercase text-[#007AFF] font-bold">{stokMode}</span>
+            {totalStockUnits} total porsi tersedia · Metode: <span className="font-mono uppercase text-[#5B4FE9] font-bold">{stokMode}</span>
           </p>
         </div>
 
@@ -80,40 +80,40 @@ export const StockModule: React.FC<StockModuleProps> = ({
           onClick={onToggleStokMode}
           className="px-3.5 py-1.5 rounded-xl bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#1C1C1E] text-xs font-semibold flex items-center gap-1.5 transition-colors self-start sm:self-auto border border-[#E5E5EA]"
         >
-          <ArrowDownUp className="w-3.5 h-3.5 text-[#007AFF]" />
+          <ArrowDownUp className="w-3.5 h-3.5 text-[#5B4FE9]" />
           Ganti Mode ({stokMode.toUpperCase()})
         </button>
       </div>
 
       {/* Apple Health style Metrics */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs">
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs">
           <span className="text-xs text-[#8E8E93] font-medium">Total Menu</span>
           <div className="text-2xl font-bold text-[#1C1C1E] mt-1">{totalItems}</div>
           <span className="text-[11px] text-[#636366]">{totalStockUnits} Porsi</span>
         </div>
 
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs">
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs">
           <span className="text-xs text-[#FF9500] font-medium">Stok Menipis</span>
           <div className="text-2xl font-bold text-[#FF9500] mt-1">{lowStockCount}</div>
           <span className="text-[11px] text-[#8E8E93]">Sisa ≤ 15 porsi</span>
         </div>
 
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs">
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs">
           <span className="text-xs text-[#FF3B30] font-medium">Stok Habis</span>
           <div className="text-2xl font-bold text-[#FF3B30] mt-1">{outOfStockCount}</div>
           <span className="text-[11px] text-[#8E8E93]">Perlu restock</span>
         </div>
 
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs">
-          <span className="text-xs text-[#007AFF] font-medium">Batch FIFO</span>
-          <div className="text-2xl font-bold text-[#007AFF] mt-1">{batches.length} Batch</div>
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs">
+          <span className="text-xs text-[#5B4FE9] font-medium">Batch FIFO</span>
+          <div className="text-2xl font-bold text-[#5B4FE9] mt-1">{batches.length} Batch</div>
           <span className="text-[11px] text-[#8E8E93]">Rotasi stok masuk</span>
         </div>
       </div>
 
       {/* Action Bar */}
-      <div className="bg-white border border-[#E5E5EA] rounded-2xl p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xs">
+      <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-3 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xs">
         <div className="relative w-full sm:w-72">
           <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#8E8E93]" />
           <input
@@ -127,7 +127,7 @@ export const StockModule: React.FC<StockModuleProps> = ({
 
         <button
           onClick={() => setShowRestockModal(true)}
-          className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#007AFF] hover:bg-[#0062CC] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+          className="w-full sm:w-auto px-4 py-2 rounded-xl bg-[#5B4FE9] hover:bg-[#4A3FD8] text-white font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-xs"
         >
           <Plus className="w-3.5 h-3.5" />
           Tambah Stok Masuk
@@ -135,7 +135,7 @@ export const StockModule: React.FC<StockModuleProps> = ({
       </div>
 
       {/* Inset Grouped Table (Apple Settings Style) */}
-      <div className="bg-white border border-[#E5E5EA] rounded-2xl overflow-hidden shadow-2xs">
+      <div className="bg-white border border-[#E5E5EA] rounded-[24px] overflow-hidden shadow-2xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-[#1C1C1E]">
             <thead className="bg-[#F2F2F7] text-[#636366] font-semibold border-b border-[#E5E5EA]">
@@ -186,7 +186,7 @@ export const StockModule: React.FC<StockModuleProps> = ({
                         </button>
                         <button
                           onClick={() => onUpdateMenuStockDirect(item.id, item.stok + 10)}
-                          className="px-2 py-1 rounded-lg bg-[#007AFF]/10 hover:bg-[#007AFF]/20 text-[#007AFF] text-xs font-mono font-semibold"
+                          className="px-2 py-1 rounded-lg bg-[#5B4FE9]/10 hover:bg-[#5B4FE9]/20 text-[#5B4FE9] text-xs font-mono font-semibold"
                         >
                           +10
                         </button>
@@ -263,7 +263,7 @@ export const StockModule: React.FC<StockModuleProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#007AFF] hover:bg-[#0062CC] text-white font-semibold"
+                  className="px-4 py-2 rounded-xl bg-[#5B4FE9] hover:bg-[#4A3FD8] text-white font-semibold"
                 >
                   Simpan
                 </button>

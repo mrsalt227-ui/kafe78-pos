@@ -1,16 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
-  Receipt, 
-  CreditCard, 
   QrCode, 
-  Banknote, 
   CheckCircle2, 
-  Percent, 
-  Copy,
   Printer,
-  Wallet,
-  Check,
-  X,
 } from 'lucide-react';
 import { Order, formatRupiah, calculateChange } from '../utils/pos';
 import { soundEffects } from '../utils/audio';
@@ -40,8 +32,6 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
   onSettleSession,
   soundEnabled,
 }) => {
-  const { items: claims } = useRemoteList<PaymentClaim>(CLAIMS_PATH);
-  const pendingClaims = claims.filter((c) => c.status === 'pending');
   const unpaidOrders = useMemo(() => {
     // Hanya tampilkan tagihan untuk pesanan yang sudah diantar (atau selesai).
     // Pesanan yang masih menunggu approval/di dapur/siap antar belum boleh
@@ -51,15 +41,24 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
     );
   }, [orders]);
 
-  const [selectedOrderId, setSelectedOrderId] = useState<string>(
-    unpaidOrders[0]?.id || ''
-  );
+  const [selectedOrderId, setSelectedOrderId] = useState<string>('');
   const [discountPercent, setDiscountPercent] = useState<number>(0);
   const [paymentMethod, setPaymentMethod] = useState<'Tunai' | 'QRIS' | 'Transfer'>('Tunai');
   const [cashInput, setCashInput] = useState<number>(0);
   const [copiedBank, setCopiedBank] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (unpaidOrders.length > 0 && (!selectedOrderId || !unpaidOrders.find((o) => o.id === selectedOrderId))) {
+      setSelectedOrderId(unpaidOrders[0].id);
+      setDiscountPercent(0);
+      setCashInput(unpaidOrders[0].total);
+    }
+  }, [unpaidOrders]);
+
   const activeOrder = unpaidOrders.find((o) => o.id === selectedOrderId) || unpaidOrders[0];
+
+  const { items: claims } = useRemoteList<PaymentClaim>(CLAIMS_PATH);
+  const pendingClaims = claims.filter((c) => c.status === 'pending');
 
   const subtotal = activeOrder?.subtotal || 0;
   const discountAmount = Math.round((subtotal * discountPercent) / 100);
@@ -110,7 +109,7 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs">
         <div>
           <h2 className="font-bold text-base text-[#1C1C1E]">
             Kasir & Pembayaran
@@ -121,119 +120,13 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
         </div>
       </div>
 
-      {/* Klaim Pembayaran Online (dari Customer QR) */}
-      {pendingClaims.length > 0 && (
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs space-y-2.5">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#EAF4FF] text-[#007AFF] flex items-center justify-center shrink-0">
-              <Wallet className="w-3.5 h-3.5" />
-            </div>
-            <div>
-              <h3 className="font-bold text-xs text-[#1C1C1E]">Klaim Pembayaran Online</h3>
-              <p className="text-[11px] text-[#8E8E93]">
-                {pendingClaims.length} klaim menunggu verifikasi
-              </p>
-            </div>
-          </div>
-
-          {pendingClaims.map((claim) => {
-            const sessionOrders = orders.filter(
-              (o) => o.sessionId === claim.sessionId && o.status !== 'ditolak'
-            );
-            return (
-              <div key={claim._key} className="bg-[#F2F2F7] rounded-xl p-3 border border-[#E5E5EA]/60">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-xs font-bold text-[#1C1C1E]">{claim.tableName}</p>
-                    <p className="text-[10px] text-[#8E8E93] mt-0.5">
-                      {claim.method} · {sessionOrders.length} pesanan ·{' '}
-                      {new Date(claim.createdAt).toLocaleTimeString('id-ID', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </p>
-                  </div>
-                  <p className="text-xs font-bold text-[#1C1C1E]">{formatRupiah(claim.amount)}</p>
-                </div>
-                <div className="flex gap-2 mt-2.5">
-                  <button
-                    onClick={async () => {
-                      if (soundEnabled) soundEffects.cash();
-                      await updateClaimStatus(claim._key, 'verified');
-                      onSettleSession(claim.sessionId);
-                    }}
-                    className="flex-1 py-1.5 rounded-lg bg-[#34C759] text-white text-[11px] font-semibold flex items-center justify-center gap-1"
-                  >
-                    <Check className="w-3 h-3" /> Verifikasi & lunasi meja
-                  </button>
-                  <button
-                    onClick={() => updateClaimStatus(claim._key, 'rejected')}
-                    className="px-3 py-1.5 rounded-lg bg-[#FFEBEB] text-[#FF3B30] text-[11px] font-semibold flex items-center gap-1"
-                  >
-                    <X className="w-3 h-3" /> Tolak
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Tutup sesi meja Customer QR tanpa klaim online (bayar langsung di kasir).
-          Hanya muncul kalau SEMUA pesanan aktif di sesi itu sudah diantar/selesai. */}
-      {(() => {
-        const unpaidSessionIds = Array.from(
-          new Set(
-            orders
-              .filter((o) => o.sessionId && o.paymentStatus === 'unpaid')
-              .map((o) => o.sessionId as string)
-          )
-        );
-        const readySessionIds = unpaidSessionIds.filter((sessionId) => {
-          const sessionOrders = orders.filter(
-            (o) => o.sessionId === sessionId && o.status !== 'ditolak' && o.status !== 'dibatalkan'
-          );
-          return (
-            sessionOrders.length > 0 &&
-            sessionOrders.every((o) => o.status === 'diantar' || o.status === 'selesai')
-          );
-        });
-        return readySessionIds.length > 0 && (
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs space-y-2">
-          <p className="text-xs font-semibold text-[#3A3A3C] flex items-center gap-1.5">
-            <Wallet className="w-3.5 h-3.5 text-[#8E8E93]" /> Tutup sesi meja QR (bayar di kasir)
-          </p>
-          <div className="space-y-2">
-            {readySessionIds.map((sessionId) => {
-              const sessionOrders = orders.filter((o) => o.sessionId === sessionId);
-              const total = sessionOrders
-                .filter((o) => o.status !== 'ditolak')
-                .reduce((sum, o) => sum + o.total, 0);
-              return (
-                <div key={sessionId} className="flex items-center justify-between gap-2">
-                  <span className="text-xs text-[#3A3A3C]">
-                    {sessionOrders[0]?.meja || 'Meja'} · {formatRupiah(total)}
-                  </span>
-                  <button
-                    onClick={() => onSettleSession(sessionId)}
-                    className="px-3 py-1.5 rounded-lg bg-[#F2F2F7] text-[#1C1C1E] text-[11px] font-semibold"
-                  >
-                    Lunasi & tutup
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        );
-      })()}
-
+      {/* Daftar Meja Belum Lunas */}
       {unpaidOrders.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-[#E5E5EA] p-12 text-center text-[#8E8E93] space-y-2">
+        <div className="bg-white rounded-[24px] border border-[#E5E5EA] p-12 text-center text-[#8E8E93] space-y-2">
           <CheckCircle2 className="w-10 h-10 mx-auto text-[#34C759]" />
           <h3 className="font-bold text-sm text-[#1C1C1E]">Semua Tagihan Telah Lunas</h3>
           <p className="text-xs text-[#8E8E93] max-w-sm mx-auto">
-            Tidak ada pesanan yang menunggu pembayaran saat ini.
+            Belum ada pesanan nunggu bayar, asikk 😌
           </p>
         </div>
       ) : (
@@ -253,9 +146,9 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                   <button
                     key={ord.id}
                     onClick={() => handleSelectOrder(ord.id)}
-                    className={`w-full text-left p-3.5 rounded-2xl border transition-all ${
+                    className={`w-full text-left p-3.5 rounded-[24px] border transition-all ${
                       isSelected
-                        ? 'bg-white border-[#007AFF] shadow-xs ring-1 ring-[#007AFF]/20'
+                        ? 'bg-white border-[#5B4FE9] shadow-xs ring-1 ring-[#5B4FE9]/20'
                         : 'bg-white border-[#E5E5EA] hover:border-[#D1D1D6]'
                     }`}
                   >
@@ -284,7 +177,7 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
           </div>
 
           {/* Right: Cash Register Checkout Desk */}
-          <div className="lg:col-span-8 bg-white border border-[#E5E5EA] rounded-2xl p-5 shadow-2xs space-y-4">
+          <div className="lg:col-span-8 bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs space-y-4">
             {activeOrder && (
               <>
                 <div className="flex items-center justify-between border-b border-[#F2F2F7] pb-3">
@@ -349,7 +242,7 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                         onClick={() => setPaymentMethod(m)}
                         className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-all ${
                           paymentMethod === m
-                            ? 'bg-white text-[#007AFF] font-semibold shadow-xs'
+                            ? 'bg-white text-[#5B4FE9] font-semibold shadow-xs'
                             : 'text-[#636366] hover:text-[#1C1C1E]'
                         }`}
                       >
@@ -388,7 +281,7 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                       value={cashInput || ''}
                       onChange={(e) => setCashInput(Number(e.target.value) || 0)}
                       placeholder="Nominal tunai..."
-                      className="w-full bg-white border border-[#D1D1D6] rounded-xl px-3 py-2 text-sm text-[#1C1C1E] font-mono focus:outline-none focus:ring-2 focus:ring-[#007AFF]/30"
+                      className="w-full bg-white border border-[#D1D1D6] rounded-xl px-3 py-2 text-sm text-[#1C1C1E] font-mono focus:outline-none focus:ring-2 focus:ring-[#5B4FE9]/30"
                     />
 
                     <div className="flex justify-between items-center text-xs pt-1 border-t border-[#E5E5EA]">
@@ -413,7 +306,7 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                       <QrCode className="w-24 h-24 text-[#1C1C1E]" />
                     </div>
                     <p className="text-xs font-medium text-[#1C1C1E]">
-                      Pindai QRIS Kafe 78 dengan BCA, GoPay, OVO, atau ShopeePay
+                      Pindai QRIS Warung Sontoloyo dengan BCA, GoPay, OVO, atau ShopeePay
                     </p>
                   </div>
                 )}
@@ -422,10 +315,10 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                 {paymentMethod === 'Transfer' && (
                   <div className="bg-[#F2F2F7] rounded-xl p-3 border border-[#E5E5EA]/60 space-y-2 text-xs">
                     <div className="flex justify-between items-center p-2 bg-white rounded-lg border border-[#E5E5EA]">
-                      <span><b className="text-[#007AFF]">BCA:</b> 788-019-2819</span>
+                      <span><b className="text-[#5B4FE9]">BCA:</b> 788-019-2819</span>
                       <button
                         onClick={() => copyToClipboard('7880192819', 'BCA')}
-                        className="text-[11px] text-[#007AFF] hover:underline"
+                        className="text-[11px] text-[#5B4FE9] hover:underline"
                       >
                         {copiedBank === 'BCA' ? 'Tersalin' : 'Salin'}
                       </button>
@@ -434,7 +327,7 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                       <span><b className="text-[#FF9500]">Mandiri:</b> 137-00-887788-1</span>
                       <button
                         onClick={() => copyToClipboard('137008877881', 'Mandiri')}
-                        className="text-[11px] text-[#007AFF] hover:underline"
+                        className="text-[11px] text-[#5B4FE9] hover:underline"
                       >
                         {copiedBank === 'Mandiri' ? 'Tersalin' : 'Salin'}
                       </button>
@@ -460,7 +353,7 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                   </div>
                   <div className="flex justify-between items-baseline pt-2 border-t border-[#F2F2F7] font-bold text-[#1C1C1E]">
                     <span className="text-sm">TOTAL</span>
-                    <span className="font-mono text-xl text-[#007AFF]">
+                    <span className="font-mono text-xl text-[#5B4FE9]">
                       {formatRupiah(grandTotal)}
                     </span>
                   </div>
@@ -473,7 +366,7 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                   className={`w-full py-3.5 rounded-xl font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs ${
                     paymentMethod === 'Tunai' && !isCashSufficient
                       ? 'bg-[#E5E5EA] text-[#8E8E93] cursor-not-allowed'
-                      : 'bg-[#007AFF] hover:bg-[#0062CC] text-white'
+                      : 'bg-[#5B4FE9] hover:bg-[#4A3FD8] text-white'
                   }`}
                 >
                   <Printer className="w-4 h-4" />
@@ -484,6 +377,71 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
           </div>
         </div>
       )}
+
+      {/* Klaim Pembayaran Online */}
+      <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-sm text-[#1C1C1E]">Klaim Pembayaran Online</h3>
+          <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#5B4FE9]/10 text-[#5B4FE9] border border-[#5B4FE9]/30">
+            {pendingClaims.length} menunggu
+          </span>
+        </div>
+        {pendingClaims.length === 0 ? (
+          <p className="text-xs text-[#8E8E93] text-center py-4">Belum ada klaim pembayaran online.</p>
+        ) : (
+          <div className="space-y-2">
+            {pendingClaims.map((claim) => (
+              <div
+                key={claim.id}
+                className="flex items-center justify-between p-3 rounded-xl border border-[#E5E5EA]/60 bg-[#FCFCFD]"
+              >
+                <div>
+                  <div className="font-semibold text-sm text-[#1C1C1E]">{claim.tableName}</div>
+                  <div className="text-xs text-[#636366]">{formatRupiah(claim.amount)} · {claim.method}</div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => {
+                      updateClaimStatus(claim.id, 'verified');
+                      soundEffects.cash();
+                    }}
+                    className="px-2 py-1 rounded-lg text-[10px] font-semibold text-white bg-[#34C759] hover:bg-[#2FA34A]"
+                  >
+                    Verifikasi
+                  </button>
+                  <button
+                    onClick={() => updateClaimStatus(claim.id, 'rejected')}
+                    className="px-2 py-1 rounded-lg text-[10px] font-semibold text-white bg-[#FF3B30] hover:bg-[#D62A2A]"
+                  >
+                    Tolak
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Tutup Sesi Meja QR */}
+      <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs">
+        <h3 className="font-bold text-sm text-[#1C1C1E] mb-3">Tutup Sesi Meja QR</h3>
+        <p className="text-xs text-[#8E8E93] mb-4">
+          Tutup sesi meja yang sudah selesai dan tidak akan dipakai lagi.
+        </p>
+        <button
+          onClick={() => {
+            if (window.confirm('Tutup sesi meja ini? Data sesi akan ditandai selesai.')) {
+              onSettleSession(activeOrder?.sessionId || '');
+              soundEffects.tap();
+            }
+          }}
+          disabled={!activeOrder}
+          className="w-full py-2.5 rounded-xl bg-[#1A1B2E] text-white text-xs font-semibold hover:bg-[#25263B] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        >
+          {activeOrder ? `Tutup Sesi ${activeOrder.meja}` : 'Pilih meja dulu'}
+        </button>
+      </div>
+
     </div>
   );
 };

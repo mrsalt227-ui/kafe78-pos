@@ -71,7 +71,7 @@ ${lowMarginItems.slice(0, 4).map((it: any, idx: number) => `${idx + 1}. ${it.nam
 Gaya komunikasi kamu: Sangat profesional, berbasis data nyata, tajam, hangat, dan memberikan langkah-langkah praktis (actionable) yang dapat segera dieksekusi oleh pemilik kafe dan manajer operasional.
 
 Tugasmu:
-Analisis kinerja keuangan dan HPP (Harga Pokok Penjualan) Kafe 78.
+Analisis kinerja keuangan dan HPP (Harga Pokok Penjualan) Warung Sontoloyo.
 Sajikan analisis dalam format Markdown terstruktur rapi dengan poin-poin jelas:
 1. 🎯 **Ringkasan Eksekutif & Diagnosis Margin** (Evaluasi kesehatan gross margin vs standar industri kafe 55% - 68%).
 2. 💡 **Analisis Menu Matrix & Kontribusi Laba** (Soroti Star Items yang jadi mesin pencetak profit, dan menu dengan HPP tinggi).
@@ -92,7 +92,7 @@ Gunakan bahasa Indonesia yang lugas, elegan, dan hindari kata klise.`;
             },
           });
 
-          const prompt = `Lakukan analisis finansial dan HPP mendalam untuk Kafe 78 berdasarkan data berikut ini:\n\n${dataPayload}\n\nFokus analisis: ${focus}.`;
+          const prompt = `Lakukan analisis finansial dan HPP mendalam untuk Warung Sontoloyo berdasarkan data berikut ini:\n\n${dataPayload}\n\nFokus analisis: ${focus}.`;
 
           const response = await ai.models.generateContent({
             model: 'gemini-3.8-flash',
@@ -194,7 +194,7 @@ Gunakan bahasa Indonesia yang lugas, elegan, dan hindari kata klise.`;
   }
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Kafe 78 Server] Running on http://0.0.0.0:${PORT} (PID: ${process.pid})`);
+    console.log(`[Warung Sontoloyo Server] Running on http://0.0.0.0:${PORT} (PID: ${process.pid})`);
   });
 }
 

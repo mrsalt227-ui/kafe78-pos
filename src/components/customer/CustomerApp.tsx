@@ -299,7 +299,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
   if (screen === 'loading') {
     return (
       <div className="min-h-screen bg-[#F2F2F7] flex flex-col items-center justify-center gap-3 text-[#636366]">
-        <Loader2 className="w-6 h-6 animate-spin text-[#007AFF]" />
+        <Loader2 className="w-6 h-6 animate-spin text-[#5B4FE9]" />
         <p className="text-sm">Menyiapkan menu…</p>
       </div>
     );
@@ -308,7 +308,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
   if (screen === 'invalid' || screen === 'error') {
     return (
       <div className="min-h-screen bg-[#F2F2F7] flex flex-col items-center justify-center px-6 text-center">
-        <div className="w-14 h-14 rounded-2xl bg-[#FFEBEB] text-[#FF3B30] flex items-center justify-center mb-4">
+        <div className="w-14 h-14 rounded-[24px] bg-[#FFEBEB] text-[#FF3B30] flex items-center justify-center mb-4">
           <AlertTriangle className="w-7 h-7" />
         </div>
         <h1 className="text-lg font-bold text-[#1C1C1E]">
@@ -326,7 +326,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
   if (isClosed) {
     return (
       <div className="min-h-screen bg-[#F2F2F7] flex flex-col items-center justify-center px-6 text-center">
-        <div className="w-14 h-14 rounded-2xl bg-[#E9F9EE] text-[#34C759] flex items-center justify-center mb-4">
+        <div className="w-14 h-14 rounded-[24px] bg-[#E9F9EE] text-[#34C759] flex items-center justify-center mb-4">
           <Check className="w-7 h-7" />
         </div>
         <h1 className="text-lg font-bold text-[#1C1C1E]">Sesi meja sudah ditutup</h1>
@@ -343,10 +343,10 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-[#1C1C1E] text-white flex items-center justify-center font-bold text-sm">
-              78
+              WS
             </div>
             <div>
-              <h1 className="text-sm font-bold leading-tight">Kafe 78</h1>
+              <h1 className="text-sm font-bold leading-tight">Warung Sontoloyo</h1>
               <p className="text-[11px] text-[#8E8E93] leading-none mt-0.5">
                 Pesan langsung dari meja
               </p>
@@ -367,7 +367,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Cari menu…"
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white border border-[#E5E5EA] text-sm outline-none focus:border-[#007AFF]"
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-white border border-[#E5E5EA] text-sm outline-none focus:border-[#5B4FE9]"
               />
             </div>
 
@@ -399,7 +399,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
                       setDetailQty(1);
                       setDetailNote('');
                     }}
-                    className={`text-left bg-white rounded-2xl border border-[#E5E5EA] p-3 flex gap-3 items-center transition-all ${
+                    className={`text-left bg-white rounded-[24px] border border-[#E5E5EA] p-3 flex gap-3 items-center transition-all ${
                       soldOut ? 'opacity-50' : 'active:scale-[0.99]'
                     }`}
                   >
@@ -425,7 +425,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
                       </p>
                       <p className="text-sm font-bold text-[#1C1C1E] mt-1">{formatRupiah(item.h)}</p>
                     </div>
-                    <span className="w-8 h-8 rounded-full bg-[#007AFF] text-white flex items-center justify-center shrink-0">
+                    <span className="w-8 h-8 rounded-full bg-[#5B4FE9] text-white flex items-center justify-center shrink-0">
                       <Plus className="w-4 h-4" />
                     </span>
                   </button>
@@ -443,11 +443,11 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
             {sessionOrders.length === 0 && (
               <div className="text-center py-16">
                 <ClipboardList className="w-8 h-8 text-[#C7C7CC] mx-auto mb-2" />
-                <p className="text-sm text-[#8E8E93]">Belum ada pesanan.</p>
+                <p className="text-sm text-[#8E8E93]">Keranjang lo masih kosong, yuk isi 🛒</p>
               </div>
             )}
             {sessionOrders.map((order) => (
-              <div key={order.id} className="bg-white rounded-2xl border border-[#E5E5EA] p-3">
+              <div key={order.id} className="bg-white rounded-[24px] border border-[#E5E5EA] p-3">
                 <div className="flex items-center justify-between">
                   <p className="text-xs font-semibold text-[#636366]">{order.id}</p>
                   <span
@@ -484,7 +484,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
             <button
               onClick={() => handleCallWaiter('help')}
               disabled={!!openCall}
-              className="w-full py-3 rounded-xl bg-white border border-[#E5E5EA] text-sm font-semibold text-[#007AFF] flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full py-3 rounded-xl bg-white border border-[#E5E5EA] text-sm font-semibold text-[#5B4FE9] flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <BellRing className="w-4 h-4" />
               {openCall ? 'Menunggu staf…' : 'Panggil Pelayan'}
@@ -494,7 +494,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
 
         {tab === 'bill' && (
           <div className="px-4 pt-3 space-y-3">
-            <div className="bg-white rounded-2xl border border-[#E5E5EA] p-4">
+            <div className="bg-white rounded-[24px] border border-[#E5E5EA] p-4">
               <p className="text-[11px] uppercase tracking-wide text-[#8E8E93] font-semibold">
                 Tagihan berjalan
               </p>
@@ -505,7 +505,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
             </div>
 
             {pendingClaim && (
-              <div className="bg-[#FFF4E5] rounded-2xl p-3 flex items-start gap-2">
+              <div className="bg-[#FFF4E5] rounded-[24px] p-3 flex items-start gap-2">
                 <Wallet className="w-4 h-4 text-[#C76B00] mt-0.5" />
                 <div>
                   <p className="text-xs font-semibold text-[#C76B00]">
@@ -518,14 +518,14 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
               </div>
             )}
 
-            <div className="bg-white rounded-2xl border border-[#E5E5EA] divide-y divide-[#F2F2F7]">
+            <div className="bg-white rounded-[24px] border border-[#E5E5EA] divide-y divide-[#F2F2F7]">
               <button
                 onClick={() => handleCallWaiter('bill')}
                 disabled={!!openCall}
                 className="w-full px-4 py-3 flex items-center justify-between text-sm disabled:opacity-50"
               >
                 <span className="flex items-center gap-2 font-medium">
-                  <BellRing className="w-4 h-4 text-[#007AFF]" /> Minta tagihan ke kasir
+                  <BellRing className="w-4 h-4 text-[#5B4FE9]" /> Minta tagihan ke kasir
                 </span>
                 <span className="text-[#C7C7CC]">›</span>
               </button>
@@ -535,14 +535,14 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
                 className="w-full px-4 py-3 flex items-center justify-between text-sm disabled:opacity-50"
               >
                 <span className="flex items-center gap-2 font-medium">
-                  <BellRing className="w-4 h-4 text-[#007AFF]" /> Panggil pelayan
+                  <BellRing className="w-4 h-4 text-[#5B4FE9]" /> Panggil pelayan
                 </span>
                 <span className="text-[#C7C7CC]">›</span>
               </button>
             </div>
 
             {settings.selfPaymentEnabled && billTotal > 0 && !pendingClaim && (
-              <div className="bg-white rounded-2xl border border-[#E5E5EA] p-4 space-y-3">
+              <div className="bg-white rounded-[24px] border border-[#E5E5EA] p-4 space-y-3">
                 <p className="text-sm font-semibold">Bayar dari HP</p>
                 <div className="grid grid-cols-2 gap-2">
                   {(['QRIS', 'Transfer'] as const).map((method) => (
@@ -551,7 +551,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
                       onClick={() => setPayMethod(method)}
                       className={`py-2.5 rounded-xl border text-sm font-medium ${
                         payMethod === method
-                          ? 'border-[#007AFF] bg-[#EAF4FF] text-[#0066D6]'
+                          ? 'border-[#5B4FE9] bg-[#EAF4FF] text-[#0066D6]'
                           : 'border-[#E5E5EA] bg-white text-[#3A3A3C]'
                       }`}
                     >
@@ -562,7 +562,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
                 <button
                   onClick={handleClaimPayment}
                   disabled={!payMethod}
-                  className="w-full py-3 rounded-xl bg-[#007AFF] text-white text-sm font-semibold disabled:opacity-40"
+                  className="w-full py-3 rounded-xl bg-[#5B4FE9] text-white text-sm font-semibold disabled:opacity-40"
                 >
                   Kirim klaim bayar {formatRupiah(billTotal)}
                 </button>
@@ -584,7 +584,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
       {cartCount > 0 && tab === 'menu' && (
         <button
           onClick={() => setCartOpen(true)}
-          className="fixed bottom-20 left-4 right-4 z-30 bg-[#1C1C1E] text-white rounded-2xl px-4 py-3 flex items-center justify-between shadow-lg"
+          className="fixed bottom-20 left-4 right-4 z-30 bg-[#1C1C1E] text-white rounded-[24px] px-4 py-3 flex items-center justify-between shadow-lg"
         >
           <span className="flex items-center gap-2 text-sm font-semibold">
             <ShoppingBag className="w-4 h-4" /> {cartCount} item
@@ -606,7 +606,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
               key={id}
               onClick={() => setTab(id)}
               className={`flex-1 py-2.5 flex flex-col items-center gap-1 text-[10px] font-medium ${
-                tab === id ? 'text-[#007AFF]' : 'text-[#8E8E93]'
+                tab === id ? 'text-[#5B4FE9]' : 'text-[#8E8E93]'
               }`}
             >
               <Icon className="w-5 h-5" />
@@ -623,7 +623,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start gap-3">
-              <div className="w-16 h-16 rounded-2xl bg-[#F2F2F7] flex items-center justify-center text-3xl">
+              <div className="w-16 h-16 rounded-[24px] bg-[#F2F2F7] flex items-center justify-center text-3xl">
                 {detailItem.icon || '🍽️'}
               </div>
               <div className="flex-1">
@@ -643,7 +643,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
               value={detailNote}
               onChange={(e) => setDetailNote(e.target.value)}
               placeholder="mis. tanpa gula, tidak pedas"
-              className="w-full mt-1 px-3 py-2.5 rounded-xl border border-[#E5E5EA] text-sm outline-none focus:border-[#007AFF]"
+              className="w-full mt-1 px-3 py-2.5 rounded-xl border border-[#E5E5EA] text-sm outline-none focus:border-[#5B4FE9]"
             />
 
             <div className="flex items-center justify-between mt-4">
@@ -670,7 +670,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
                 addToCart(detailItem, detailQty, detailNote.trim() || undefined);
                 setDetailItem(null);
               }}
-              className="w-full mt-5 py-3 rounded-xl bg-[#007AFF] text-white text-sm font-semibold"
+              className="w-full mt-5 py-3 rounded-xl bg-[#5B4FE9] text-white text-sm font-semibold"
             >
               Tambah · {formatRupiah(detailItem.h * detailQty)}
             </button>
@@ -740,7 +740,7 @@ export const CustomerApp: React.FC<CustomerAppProps> = ({ token }) => {
             <button
               onClick={handleSubmitOrder}
               disabled={submitting || cartLines.length === 0}
-              className="w-full mt-4 py-3 rounded-xl bg-[#007AFF] text-white text-sm font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full mt-4 py-3 rounded-xl bg-[#5B4FE9] text-white text-sm font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
               Kirim Pesanan ke Dapur

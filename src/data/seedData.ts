@@ -53,7 +53,7 @@ export const INITIAL_MENU: MenuItem[] = [
   },
   {
     id: 'm6',
-    n: 'Nasi Goreng Spesial 78',
+    n: 'Nasi Goreng Spesial Sontoloyo',
     h: 28000,
     costPrice: 13500,
     category: 'Makanan',
@@ -151,7 +151,7 @@ export const INITIAL_ORDERS: Order[] = [
     id: 'ORD-7802',
     meja: '05',
     items: [
-      { id: 'm6', n: 'Nasi Goreng Spesial 78', h: 28000, qty: 1, note: 'Pedas sedang', done: true },
+      { id: 'm6', n: 'Nasi Goreng Spesial Sontoloyo', h: 28000, qty: 1, note: 'Pedas sedang', done: true },
       { id: 'm4', n: 'Matcha Uji Latte', h: 22000, qty: 1, done: true },
     ],
     subtotal: 50000,
@@ -208,7 +208,7 @@ export const INITIAL_COMPLETED_ORDERS: Order[] = [
     id: 'ORD-7792',
     meja: '02',
     items: [
-      { id: 'm6', n: 'Nasi Goreng Spesial 78', h: 28000, qty: 2, done: true },
+      { id: 'm6', n: 'Nasi Goreng Spesial Sontoloyo', h: 28000, qty: 2, done: true },
       { id: 'm2', n: 'Americano Single Origin', h: 20000, qty: 2, done: true },
     ],
     subtotal: 96000,
@@ -307,7 +307,7 @@ export const INITIAL_COMPLETED_ORDERS: Order[] = [
     id: 'ORD-7781',
     meja: '08',
     items: [
-      { id: 'm6', n: 'Nasi Goreng Spesial 78', h: 28000, qty: 3, done: true },
+      { id: 'm6', n: 'Nasi Goreng Spesial Sontoloyo', h: 28000, qty: 3, done: true },
       { id: 'm4', n: 'Matcha Uji Latte', h: 22000, qty: 3, done: true },
     ],
     subtotal: 150000,
@@ -390,7 +390,7 @@ export const INITIAL_COMPLETED_ORDERS: Order[] = [
     id: 'ORD-7740',
     meja: '07',
     items: [
-      { id: 'm6', n: 'Nasi Goreng Spesial 78', h: 28000, qty: 2, done: true },
+      { id: 'm6', n: 'Nasi Goreng Spesial Sontoloyo', h: 28000, qty: 2, done: true },
       { id: 'm3', n: 'Caramel Macchiato Ice', h: 24000, qty: 2, done: true },
       { id: 'm12', n: 'Butter Croissant Almond', h: 22000, qty: 1, done: true },
     ],
@@ -446,7 +446,7 @@ export const INITIAL_CHAT_MESSAGES: ChatMessage[] = [
     sender: 'Siti',
     role: 'waiter',
     channel: 'umum',
-    text: 'Selamat pagi tim Kafe 78! Meja 2 dan 5 sudah ada pesanan ya.',
+    text: 'Selamat pagi tim Warung Sontoloyo! Meja 2 dan 5 sudah ada pesanan ya.',
     timestamp: Date.now() - 1000 * 60 * 15,
   },
   {

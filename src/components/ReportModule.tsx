@@ -202,7 +202,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
   const paymentBreakdown = useMemo(() => {
     const methods: Record<string, { total: number; count: number; color: string; label: string }> = {
       Tunai: { total: 0, count: 0, color: '#34C759', label: 'Tunai' },
-      QRIS: { total: 0, count: 0, color: '#007AFF', label: 'QRIS' },
+      QRIS: { total: 0, count: 0, color: '#5B4FE9', label: 'QRIS' },
       Transfer: { total: 0, count: 0, color: '#5856D6', label: 'Transfer' },
     };
 
@@ -343,7 +343,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Laporan-Kafe78-${period}-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `Laporan-WarungSontoloyo-${period}-${new Date().toISOString().split('T')[0]}.csv`;
     a.click();
   };
 
@@ -384,10 +384,10 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
       {/* iOS App Store / Health Style Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-[#E5E5EA] rounded-2xl p-5 shadow-2xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-8 h-8 rounded-xl bg-[#007AFF]/10 text-[#007AFF] flex items-center justify-center font-bold">
+            <span className="w-8 h-8 rounded-xl bg-[#5B4FE9]/10 text-[#5B4FE9] flex items-center justify-center font-bold">
               <TrendingUp className="w-4 h-4" />
             </span>
             <div>
@@ -395,7 +395,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                 Laporan & Analisis Penjualan
               </h2>
               <p className="text-xs text-[#8E8E93]">
-                Visualisasi data transaksi, performa menu, dan jam tersibuk Kafe 78
+                Visualisasi data transaksi, performa menu, dan jam tersibuk Warung Sontoloyo
               </p>
             </div>
           </div>
@@ -403,7 +403,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
 
         <div className="flex items-center flex-wrap gap-2">
           {/* iOS Segmented Control: Period */}
-          <div className="bg-[#E5E5EA] p-1 rounded-xl flex items-center gap-1 shadow-2xs">
+          <div className="bg-[#E5E5EA] p-1 rounded-xl flex items-center gap-1 shadow-2xs sm:flex-nowrap flex-wrap">
             <button
               onClick={() => setPeriod('today')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
@@ -440,16 +440,16 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
             onClick={exportCSV}
             className="px-3.5 py-1.5 rounded-xl bg-white border border-[#D1D1D6] hover:bg-[#F2F2F7] text-[#1C1C1E] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
           >
-            <Download className="w-3.5 h-3.5 text-[#007AFF]" />
+            <Download className="w-3.5 h-3.5 text-[#5B4FE9]" />
             Ekspor CSV
           </button>
         </div>
       </div>
 
       {/* Primary KPI Apple Metric Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Total Omzet */}
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs hover:shadow-xs transition-all">
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs hover:shadow-xs transition-all">
           <div className="flex items-center justify-between text-[#8E8E93] mb-1">
             <span className="text-xs font-medium">Total Omzet Penjualan</span>
             <span className="text-[10px] font-semibold text-[#34C759] flex items-center gap-0.5 bg-[#34C759]/10 px-1.5 py-0.5 rounded-md">
@@ -463,7 +463,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
               )}
             </span>
           </div>
-          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-[#007AFF] tracking-tight">
+          <div className="text-2xl sm:text-3xl font-extrabold font-mono text-[#5B4FE9] tracking-tight">
             {formatRupiah(totalRevenue)}
           </div>
           <div className="text-[11px] text-[#8E8E93] mt-1.5 flex items-center gap-1">
@@ -473,10 +473,10 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
         </div>
 
         {/* Transaksi Lunas */}
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs hover:shadow-xs transition-all">
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs hover:shadow-xs transition-all">
           <div className="flex items-center justify-between text-[#8E8E93] mb-1">
             <span className="text-xs font-medium">Transaksi Lunas</span>
-            <span className="w-5 h-5 rounded-full bg-[#007AFF]/10 text-[#007AFF] flex items-center justify-center text-[10px] font-bold">
+            <span className="w-5 h-5 rounded-full bg-[#5B4FE9]/10 text-[#5B4FE9] flex items-center justify-center text-[10px] font-bold">
               ✓
             </span>
           </div>
@@ -489,7 +489,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
         </div>
 
         {/* AOV (Average Order Value) */}
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs hover:shadow-xs transition-all">
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs hover:shadow-xs transition-all">
           <div className="flex items-center justify-between text-[#8E8E93] mb-1">
             <span className="text-xs font-medium">Rata-rata Order (AOV)</span>
             <DollarSign className="w-3.5 h-3.5 text-[#8E8E93]" />
@@ -503,7 +503,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
         </div>
 
         {/* Total Item Terjual */}
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs hover:shadow-xs transition-all">
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs hover:shadow-xs transition-all">
           <div className="flex items-center justify-between text-[#8E8E93] mb-1">
             <span className="text-xs font-medium">Porsi Terjual</span>
             <UtensilsCrossed className="w-3.5 h-3.5 text-[#8E8E93]" />
@@ -518,7 +518,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
       </div>
 
       {/* MAIN INTERACTIVE CHART (Apple Stocks / Health Style) */}
-      <div className="bg-white border border-[#E5E5EA] rounded-2xl p-5 shadow-2xs space-y-4">
+      <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs space-y-4">
         {/* Chart Header & Controls */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#F2F2F7] pb-4">
           <div>
@@ -545,7 +545,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
               <button
                 onClick={() => setMetric('revenue')}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  metric === 'revenue' ? 'bg-white text-[#007AFF] shadow-2xs' : 'text-[#636366]'
+                  metric === 'revenue' ? 'bg-white text-[#5B4FE9] shadow-2xs' : 'text-[#636366]'
                 }`}
               >
                 Omzet (Rp)
@@ -553,7 +553,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
               <button
                 onClick={() => setMetric('orders')}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  metric === 'orders' ? 'bg-white text-[#007AFF] shadow-2xs' : 'text-[#636366]'
+                  metric === 'orders' ? 'bg-white text-[#5B4FE9] shadow-2xs' : 'text-[#636366]'
                 }`}
               >
                 Pesanan
@@ -561,7 +561,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
               <button
                 onClick={() => setMetric('aov')}
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                  metric === 'aov' ? 'bg-white text-[#007AFF] shadow-2xs' : 'text-[#636366]'
+                  metric === 'aov' ? 'bg-white text-[#5B4FE9] shadow-2xs' : 'text-[#636366]'
                 }`}
               >
                 AOV
@@ -593,7 +593,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
         </div>
 
         {/* Visual Chart Canvas */}
-        <div className="w-full relative pt-2">
+        <div className="w-full relative pt-2 sm:pt-6 overflow-x-auto">
           {chartStyle === 'bar' ? (
             /* Apple Health Style Rounded Bar Chart */
             <div className="h-56 flex items-end justify-between gap-2 sm:gap-4 px-2 pt-6">
@@ -619,7 +619,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                       style={{ left: `${((idx + 0.5) / chartData.length) * 100}%` }}
                     >
                       <div className="bg-[#1C1C1E] text-white text-[11px] font-mono px-2.5 py-1 rounded-xl shadow-lg whitespace-nowrap">
-                        <span className="font-bold text-[#007AFF] mr-1">{d.label}:</span>
+                        <span className="font-bold text-[#5B4FE9] mr-1">{d.label}:</span>
                         {metric === 'revenue' ? formatRupiah(d.revenue) : metric === 'orders' ? `${d.orders} Order` : formatRupiah(d.aov)}
                       </div>
                     </div>
@@ -630,10 +630,10 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                         <div
                           className={`w-full rounded-lg transition-all duration-500 ease-out ${
                             isPeak
-                              ? 'bg-gradient-to-t from-[#007AFF] to-[#5856D6]'
+                              ? 'bg-gradient-to-t from-[#5B4FE9] to-[#5856D6]'
                               : isHovered
-                              ? 'bg-[#007AFF]'
-                              : 'bg-[#007AFF]/85 group-hover:bg-[#007AFF]'
+                              ? 'bg-[#5B4FE9]'
+                              : 'bg-[#5B4FE9]/85 group-hover:bg-[#5B4FE9]'
                           }`}
                           style={{ height: `${heightPercent}%` }}
                         ></div>
@@ -645,7 +645,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                       <span
                         className={`text-[11px] block transition-colors ${
                           isHovered
-                            ? 'font-bold text-[#007AFF]'
+                            ? 'font-bold text-[#5B4FE9]'
                             : isPeak
                             ? 'font-semibold text-[#1C1C1E]'
                             : 'text-[#8E8E93]'
@@ -666,13 +666,15 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
             <div className="h-56 relative w-full">
               <svg
                 viewBox={`0 0 ${areaSvgCoords.width} ${areaSvgCoords.height}`}
-                className="w-full h-full overflow-visible"
+                className="w-full max-w-full h-full overflow-visible"
                 preserveAspectRatio="none"
+                width="100%"
+                height="100%"
               >
                 <defs>
                   <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#007AFF" stopOpacity="0.35" />
-                    <stop offset="100%" stopColor="#007AFF" stopOpacity="0.0" />
+                    <stop offset="0%" stopColor="#5B4FE9" stopOpacity="0.35" />
+                    <stop offset="100%" stopColor="#5B4FE9" stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
 
@@ -697,7 +699,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                 <path
                   d={areaSvgCoords.path}
                   fill="none"
-                  stroke="#007AFF"
+                  stroke="#5B4FE9"
                   strokeWidth="3.5"
                   strokeLinecap="round"
                 />
@@ -712,7 +714,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                         cy={pt.y}
                         r={isHovered ? 6 : 4}
                         fill="#FFFFFF"
-                        stroke="#007AFF"
+                        stroke="#5B4FE9"
                         strokeWidth={isHovered ? 3.5 : 2.5}
                         className="transition-all cursor-pointer"
                         onMouseEnter={() => setHoveredDataPoint(pt.data)}
@@ -730,7 +732,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                     key={idx}
                     className={`text-[11px] ${
                       hoveredDataPoint?.label === d.label
-                        ? 'font-bold text-[#007AFF]'
+                        ? 'font-bold text-[#5B4FE9]'
                         : 'text-[#8E8E93]'
                     }`}
                   >
@@ -746,7 +748,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
       {/* Middle Row: Donut Chart, Category Performance, & Highlights */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* 1. Apple Ring Donut Chart: Payment Distribution */}
-        <div className="lg:col-span-5 bg-white border border-[#E5E5EA] rounded-2xl p-5 shadow-2xs space-y-4">
+        <div className="lg:col-span-5 bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-bold text-sm text-[#1C1C1E]">Distribusi Pembayaran</h3>
@@ -802,7 +804,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                     <span className="text-sm font-extrabold font-mono text-[#1C1C1E]">
                       {formatRupiah(paymentBreakdown[hoveredPayment]?.total || 0)}
                     </span>
-                    <span className="text-[10px] text-[#007AFF] font-bold">
+                    <span className="text-[10px] text-[#5B4FE9] font-bold">
                       {Math.round(((paymentBreakdown[hoveredPayment]?.total || 0) / (totalRevenue || 1)) * 100)}%
                     </span>
                   </>
@@ -831,7 +833,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                     onMouseLeave={() => setHoveredPayment(null)}
                     className={`p-2.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
                       isHovered
-                        ? 'bg-[#F2F2F7] border-[#007AFF]'
+                        ? 'bg-[#F2F2F7] border-[#5B4FE9]'
                         : 'bg-white border-[#E5E5EA] hover:bg-[#F8F8FA]'
                     }`}
                   >
@@ -860,7 +862,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
         </div>
 
         {/* 2. Category Performance Bars */}
-        <div className="lg:col-span-7 bg-white border border-[#E5E5EA] rounded-2xl p-5 shadow-2xs space-y-4">
+        <div className="lg:col-span-7 bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-bold text-sm text-[#1C1C1E]">Kinerja Berdasarkan Kategori</h3>
@@ -905,9 +907,9 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
       {/* Row: Business Highlights & Top 5 Best Sellers */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Executive Highlights Cards */}
-        <div className="lg:col-span-4 bg-[#F8F8FA] border border-[#E5E5EA] rounded-2xl p-4 space-y-3">
+        <div className="lg:col-span-4 bg-[#F8F8FA] border border-[#E5E5EA] rounded-[24px] p-4 space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-[#1C1C1E] uppercase tracking-wider">
-            <Sparkles className="w-3.5 h-3.5 text-[#007AFF]" />
+            <Sparkles className="w-3.5 h-3.5 text-[#5B4FE9]" />
             Sorotan Penjualan
           </div>
 
@@ -920,7 +922,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
               <div className="text-base font-bold text-[#1C1C1E] mt-0.5">
                 {peakSlot?.fullLabel || '12:00 - 14:00 (Makan Siang)'}
               </div>
-              <span className="text-[11px] text-[#007AFF] font-medium block mt-1">
+              <span className="text-[11px] text-[#5B4FE9] font-medium block mt-1">
                 Menyumbang {peakSlot ? formatRupiah(peakSlot.revenue) : 'Rp 0'} omzet
               </span>
             </div>
@@ -947,14 +949,14 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                 QRIS
               </div>
               <span className="text-[11px] text-[#5856D6] font-medium block mt-1">
-                Paling cepat & digemari pelanggan kafe
+                Paling cepat & digemari pelanggan
               </span>
             </div>
           </div>
         </div>
 
         {/* Top 5 Best Sellers with Podium Badges */}
-        <div className="lg:col-span-8 bg-white border border-[#E5E5EA] rounded-2xl p-5 shadow-2xs space-y-4">
+        <div className="lg:col-span-8 bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-bold text-sm text-[#1C1C1E]">5 Menu Terlaris (Top Performers)</h3>
@@ -965,7 +967,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
 
           <div className="space-y-3">
             {topSelling.length === 0 ? (
-              <p className="text-xs text-[#8E8E93] py-8 text-center">Belum ada transaksi di periode ini.</p>
+              <p className="text-xs text-[#8E8E93] py-8 text-center">Periode ini masih kosong, belum ada transaksi 📭</p>
             ) : (
               topSelling.map((item, idx) => {
                 const maxQty = topSelling[0]?.qty || 1;
@@ -1005,7 +1007,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                         <span className="font-mono font-bold text-xs text-[#1C1C1E] block">
                           {formatRupiah(item.revenue)}
                         </span>
-                        <span className="text-[11px] font-semibold text-[#007AFF]">
+                        <span className="text-[11px] font-semibold text-[#5B4FE9]">
                           {item.qty} porsi terjual
                         </span>
                       </div>
@@ -1013,7 +1015,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
 
                     <div className="w-full h-1.5 rounded-full bg-[#E5E5EA] overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-[#007AFF] transition-all duration-500"
+                        className="h-full rounded-full bg-[#5B4FE9] transition-all duration-500"
                         style={{ width: `${percent}%` }}
                       ></div>
                     </div>
@@ -1026,7 +1028,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
       </div>
 
       {/* Transaction History Table with Filter & Search */}
-      <div className="bg-white border border-[#E5E5EA] rounded-2xl overflow-hidden shadow-2xs p-5 space-y-4">
+      <div className="bg-white border border-[#E5E5EA] rounded-[24px] overflow-hidden shadow-2xs p-5 space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-[#F2F2F7] pb-3">
           <div>
             <h3 className="font-bold text-sm text-[#1C1C1E]">Riwayat Struk & Pembayaran</h3>
@@ -1044,7 +1046,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                 placeholder="Cari meja, tiket, menu..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 rounded-xl border border-[#D1D1D6] text-xs focus:outline-none focus:border-[#007AFF] bg-[#F2F2F7] focus:bg-white w-48 sm:w-56"
+                className="pl-8 pr-3 py-1.5 rounded-xl border border-[#D1D1D6] text-xs focus:outline-none focus:border-[#5B4FE9] bg-[#F2F2F7] focus:bg-white w-48 sm:w-56"
               />
             </div>
 
@@ -1086,13 +1088,13 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
               {tableTransactions.length === 0 ? (
                 <tr>
                   <td colSpan={8} className="py-8 text-center text-xs text-[#8E8E93]">
-                    Tidak ada transaksi yang cocok dengan pencarian / filter.
+                    Gak nemu transaksi yang cocok sama filter lo 🤔
                   </td>
                 </tr>
               ) : (
                 tableTransactions.map((ord) => (
                   <tr key={ord.id} className="hover:bg-[#F8F8FA] transition-colors">
-                    <td className="py-2.5 px-3 font-mono font-bold text-[#007AFF]">
+                    <td className="py-2.5 px-3 font-mono font-bold text-[#5B4FE9]">
                       {ord.id}
                     </td>
                     <td className="py-2.5 px-3">
@@ -1111,7 +1113,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                       <span
                         className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
                           ord.paymentMethod === 'QRIS'
-                            ? 'bg-[#007AFF]/10 text-[#007AFF]'
+                            ? 'bg-[#5B4FE9]/10 text-[#5B4FE9]'
                             : ord.paymentMethod === 'Transfer'
                             ? 'bg-[#5856D6]/10 text-[#5856D6]'
                             : 'bg-[#34C759]/10 text-[#34C759]'
@@ -1140,7 +1142,7 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
                     <td className="py-2.5 px-3 text-right">
                       <button
                         onClick={() => setSelectedReceipt(ord)}
-                        className="px-2.5 py-1 rounded-lg bg-[#007AFF]/10 hover:bg-[#007AFF]/20 text-[#007AFF] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer transition-all"
+                        className="px-2.5 py-1 rounded-lg bg-[#5B4FE9]/10 hover:bg-[#5B4FE9]/20 text-[#5B4FE9] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer transition-all"
                       >
                         <Eye className="w-3.5 h-3.5" />
                         Struk

@@ -15,7 +15,7 @@ export const QrImage: React.FC<QrImageProps> = ({ value, size = 160, className =
     QRCode.toDataURL(value, {
       width: size * 2,
       margin: 1,
-      color: { dark: '#1C1C1E', light: '#FFFFFF' },
+      color: { dark: '#1A1B2E', light: '#FFFFFF' },
       errorCorrectionLevel: 'M',
     })
       .then((url) => {
@@ -32,7 +32,7 @@ export const QrImage: React.FC<QrImageProps> = ({ value, size = 160, className =
   if (!src) {
     return (
       <div
-        className={`bg-[#F2F2F7] rounded-lg animate-pulse ${className}`}
+        className={`bg-[#F2F2F7] rounded-[16px] animate-pulse ${className}`}
         style={{ width: size, height: size }}
       />
     );
@@ -44,7 +44,7 @@ export const QrImage: React.FC<QrImageProps> = ({ value, size = 160, className =
       width={size}
       height={size}
       alt="QR code meja"
-      className={`rounded-lg bg-white ${className}`}
+      className={`rounded-[16px] bg-white shadow-sm ${className}`}
     />
   );
 };

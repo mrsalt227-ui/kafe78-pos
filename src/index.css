@@ -2,7 +2,7 @@
 
 @layer base {
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Inter", "Plus Jakarta Sans", Helvetica, Arial, sans-serif;
     background-color: #F2F2F7;
     color: #1C1C1E;
     -webkit-font-smoothing: antialiased;
@@ -10,21 +10,96 @@
   }
 }
 
-/* Custom iOS style scrollbar */
+/* Finnova-inspired design tokens */
+@layer components {
+  .btn-pill {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border;
+  }
+  .btn-pill-indigo {
+    @apply bg-[#5B4FE9] text-white border-transparent shadow-sm hover:bg-[#4A3FD8] hover:shadow-md active:scale-95;
+  }
+  .btn-pill-outline {
+    @apply bg-white border-[#E5E5EA] text-[#1C1C1E] hover:bg-[#F2F2F7] active:scale-95;
+  }
+  .btn-pill-ghost {
+    @apply bg-transparent border-transparent text-[#636366] hover:bg-[#F2F2F7] active:scale-95;
+  }
+  .btn-pill-dark {
+    @apply bg-[#1A1B2E] text-white border-transparent shadow-sm hover:bg-[#25263B] active:scale-95;
+  }
+
+  .card {
+    @apply bg-white rounded-[20px] border border-[#E5E5EA] shadow-sm overflow-hidden;
+  }
+  .card-dark {
+    @apply bg-[#1A1B2E] text-white rounded-[20px] border border-[#25263B] shadow-sm overflow-hidden;
+  }
+  .panel-dark {
+    @apply bg-[#1A1B2E] text-white rounded-[24px];
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border;
+  }
+  .chip-indigo {
+    @apply bg-[#5B4FE9]/10 border-[#5B4FE9]/30 text-[#5B4FE9];
+  }
+  .chip-white {
+    @apply bg-white border-[#E5E5EA] text-[#1C1C1E] shadow-xs;
+  }
+
+  .stat-card {
+    @apply bg-white rounded-[24px] border border-[#E5E5EA] shadow-sm p-6;
+  }
+
+  .nav-pill {
+    @apply relative flex items-center gap-1 p-1 bg-[#1A1B2E] rounded-[16px] border border-[#25263B]/50 shadow-inner overflow-x-auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-pill::-webkit-scrollbar {
+    display: none;
+  }
+  .nav-indicator {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.08));
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition: transform 0.34s cubic-bezier(0.22, 1, 0.36, 1), width 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    z-index: 0;
+    will-change: transform, width;
+  }
+  .nav-pill-item {
+    @apply relative flex items-center gap-1.5 px-3 py-1.5 rounded-[12px] text-xs font-medium transition-colors duration-200 select-none cursor-pointer shrink-0 whitespace-nowrap;
+    z-index: 1;
+  }
+  .nav-pill-item-active {
+    @apply text-white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  }
+  .nav-pill-item-inactive {
+    @apply text-[#8E8E93] hover:text-[#B0B0C3] hover:bg-[#1A1B2E]/40;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #D1D1D6;
   border-radius: 9999px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: #AEAEB2;
 }

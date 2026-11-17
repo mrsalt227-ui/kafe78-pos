@@ -111,7 +111,7 @@ export const OwnerModule: React.FC<OwnerModuleProps> = ({
   return (
     <div className="max-w-7xl mx-auto p-4 md:p-6 space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white border border-[#E5E5EA] rounded-2xl p-4 shadow-2xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs">
         <div>
           <h2 className="font-bold text-base text-[#1C1C1E]">
             Pengaturan & Menu
@@ -159,14 +159,14 @@ export const OwnerModule: React.FC<OwnerModuleProps> = ({
       {/* Tab: Menu Management */}
       {activeTab === 'menu' && (
         <div className="space-y-4">
-          <div className="flex justify-between items-center bg-white border border-[#E5E5EA] p-4 rounded-2xl shadow-2xs">
+          <div className="flex justify-between items-center bg-white border border-[#E5E5EA] p-4 rounded-[24px] shadow-2xs">
             <div>
               <h3 className="font-semibold text-xs text-[#8E8E93] uppercase tracking-wider">Katalog Hidangan</h3>
               <p className="text-xs text-[#1C1C1E]">Perubahan harga langsung aktif di layar kasir & waiter</p>
             </div>
             <button
               onClick={openCreateModal}
-              className="px-3.5 py-1.5 rounded-xl bg-[#007AFF] hover:bg-[#0062CC] text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl bg-[#5B4FE9] hover:bg-[#4A3FD8] text-white font-semibold text-xs flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               Tambah Menu
@@ -177,7 +177,7 @@ export const OwnerModule: React.FC<OwnerModuleProps> = ({
             {menu.map((item) => (
               <div
                 key={item.id}
-                className="bg-white border border-[#E5E5EA] rounded-2xl p-4 flex flex-col justify-between shadow-2xs hover:border-[#D1D1D6] transition-colors"
+                className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 flex flex-col justify-between shadow-2xs hover:border-[#D1D1D6] transition-colors"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-1">
@@ -222,7 +222,7 @@ export const OwnerModule: React.FC<OwnerModuleProps> = ({
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => openEditModal(item)}
-                        className="p-1.5 rounded-lg text-[#636366] hover:bg-[#F2F2F7] hover:text-[#007AFF] cursor-pointer"
+                        className="p-1.5 rounded-lg text-[#636366] hover:bg-[#F2F2F7] hover:text-[#5B4FE9] cursor-pointer"
                         title="Edit"
                       >
                         <Edit2 className="w-3.5 h-3.5" />
@@ -249,7 +249,7 @@ export const OwnerModule: React.FC<OwnerModuleProps> = ({
 
       {/* Tab: PIN Settings */}
       {activeTab === 'pins' && (
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-5 shadow-2xs space-y-4">
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs space-y-4">
           <div>
             <h3 className="font-semibold text-sm text-[#1C1C1E]">Kelola 6-Digit Passcode Staf</h3>
             <p className="text-xs text-[#8E8E93]">Passcode untuk masuk ke layar Waiter, Dapur, Kasir, atau Owner</p>
@@ -274,7 +274,7 @@ export const OwnerModule: React.FC<OwnerModuleProps> = ({
                         autoFocus
                         value={newPinValue}
                         onChange={(e) => setNewPinValue(e.target.value.replace(/\D/g, ''))}
-                        className="w-24 bg-white border border-[#007AFF] rounded px-2 py-0.5 font-mono text-xs font-bold text-[#1C1C1E] focus:outline-none"
+                        className="w-24 bg-white border border-[#5B4FE9] rounded px-2 py-0.5 font-mono text-xs font-bold text-[#1C1C1E] focus:outline-none"
                       />
                     ) : (
                       <span className="font-mono font-bold text-sm text-[#1C1C1E] tracking-wider">
@@ -321,10 +321,10 @@ export const OwnerModule: React.FC<OwnerModuleProps> = ({
 
       {/* Tab: System Reset */}
       {activeTab === 'system' && (
-        <div className="bg-white border border-[#E5E5EA] rounded-2xl p-5 shadow-2xs space-y-3 max-w-md">
+        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs space-y-3 max-w-md">
           <h3 className="font-semibold text-sm text-[#1C1C1E]">Reset Data Demo</h3>
           <p className="text-xs text-[#8E8E93]">
-            Kembalikan seluruh data transaksi, antrean meja, dan stok ke kondisi awal contoh Kafe 78.
+            Kembalikan seluruh data transaksi, antrean meja, dan stok ke kondisi awal contoh Warung Sontoloyo.
           </p>
           <button
             onClick={() => {
@@ -461,7 +461,7 @@ export const OwnerModule: React.FC<OwnerModuleProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-xl bg-[#007AFF] hover:bg-[#0062CC] text-white font-semibold"
+                  className="px-4 py-2 rounded-xl bg-[#5B4FE9] hover:bg-[#4A3FD8] text-white font-semibold"
                 >
                   Simpan
                 </button>

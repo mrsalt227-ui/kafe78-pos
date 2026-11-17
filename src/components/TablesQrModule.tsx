@@ -72,7 +72,7 @@ export const TablesQrModule: React.FC<TablesQrModuleProps> = ({ settings, onUpda
       }
 
       win.document.write(`<!doctype html><html lang="id"><head><meta charset="utf-8" />
-        <title>QR Meja — Kafe 78</title>
+        <title>QR Meja — Warung Sontoloyo</title>
         <style>
           * { box-sizing: border-box; }
           body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 24px; background: #fff; color: #1C1C1E; }
@@ -86,7 +86,7 @@ export const TablesQrModule: React.FC<TablesQrModuleProps> = ({ settings, onUpda
           .url { font-size: 9px; color: #8E8E93; word-break: break-all; margin-top: 6px; }
           @media print { body { padding: 8px; } .grid { gap: 10px; } }
         </style></head><body>
-        <h1>Kafe 78 — QR Pesan di Meja</h1>
+        <h1>Warung Sontoloyo — QR Pesan di Meja</h1>
         <p class="sub">Scan untuk melihat menu dan memesan langsung dari HP.</p>
         <div class="grid">
           ${cards
@@ -125,14 +125,14 @@ export const TablesQrModule: React.FC<TablesQrModuleProps> = ({ settings, onUpda
         <button
           onClick={printAll}
           disabled={busy === 'print' || tables.length === 0}
-          className="px-3 py-2 rounded-xl bg-[#007AFF] text-white text-xs font-semibold flex items-center gap-1.5 disabled:opacity-50"
+          className="px-3 py-2 rounded-xl bg-[#5B4FE9] text-white text-xs font-semibold flex items-center gap-1.5 disabled:opacity-50"
         >
           {busy === 'print' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Printer className="w-3.5 h-3.5" />}
           Cetak semua
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#E5E5EA] p-4 mb-4">
+      <div className="bg-white rounded-[24px] border border-[#E5E5EA] p-4 mb-4">
         <p className="text-xs font-semibold text-[#3A3A3C] mb-3">Pengaturan pesanan customer</p>
 
         <div className="space-y-3">
@@ -162,7 +162,7 @@ export const TablesQrModule: React.FC<TablesQrModuleProps> = ({ settings, onUpda
 
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Smartphone className="w-4 h-4 text-[#007AFF]" />
+              <Smartphone className="w-4 h-4 text-[#5B4FE9]" />
               <div>
                 <p className="text-xs font-medium text-[#1C1C1E]">Bayar mandiri dari HP</p>
                 <p className="text-[10px] text-[#8E8E93]">Klaim QRIS/transfer, verifikasi kasir</p>
@@ -192,7 +192,7 @@ export const TablesQrModule: React.FC<TablesQrModuleProps> = ({ settings, onUpda
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {tables.map((table) => (
-            <div key={table.id} className="bg-white rounded-2xl border border-[#E5E5EA] p-3">
+            <div key={table.id} className="bg-white rounded-[24px] border border-[#E5E5EA] p-3">
               <div className="flex items-center justify-between mb-2">
                 <p className="text-xs font-bold">{table.name}</p>
                 <span className="text-[10px] font-mono text-[#8E8E93]">{table.id}</span>

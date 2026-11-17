@@ -52,8 +52,8 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-black/30 backdrop-blur-xs">
-      <div className="bg-white border-l border-[#E5E5EA] w-full max-w-sm h-full flex flex-col shadow-2xl animate-in slide-in-from-right duration-200">
-        {/* iOS Header */}
+      <div className="bg-white border-l border-[#E5E5EA] w-full max-w-md h-full flex flex-col shadow-2xl animate-in slide-in-from-right duration-200">
+        {/* Header */}
         <div className="p-4 border-b border-[#F2F2F7] flex items-center justify-between">
           <div>
             <h3 className="font-bold text-sm text-[#1C1C1E]">Pesan Tim Internal</h3>
@@ -61,7 +61,7 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 rounded-full bg-[#F2F2F7] text-[#636366] hover:text-[#1C1C1E] flex items-center justify-center"
+            className="w-8 h-8 rounded-full bg-[#F2F2F7] text-[#636366] hover:text-[#1C1C1E] flex items-center justify-center cursor-pointer transition-colors"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -69,15 +69,15 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
 
         {/* Channel Segmented Control */}
         <div className="p-2 bg-[#F2F2F7] border-b border-[#E5E5EA]">
-          <div className="bg-[#E5E5EA] p-1 rounded-xl flex items-center gap-1 overflow-x-auto no-scrollbar">
+          <div className="bg-[#E5E5EA] p-1 rounded-[16px] flex items-center gap-0.5 overflow-x-auto no-scrollbar">
             {channels.map((ch) => (
               <button
                 key={ch.id}
                 onClick={() => setActiveChannel(ch.id)}
-                className={`flex-1 px-2.5 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                className={`px-3 py-1.5 rounded-[10px] text-xs font-medium whitespace-nowrap transition-all ${
                   activeChannel === ch.id
-                    ? 'bg-white text-[#1C1C1E] font-semibold shadow-xs'
-                    : 'text-[#636366] hover:text-[#1C1C1E]'
+                    ? 'bg-[#5B4FE9] text-white shadow-sm'
+                    : 'text-[#636366] hover:text-[#1C1C1E] hover:bg-[#F2F2F7]'
                 }`}
               >
                 {ch.label}
@@ -92,18 +92,18 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
             <button
               key={idx}
               onClick={() => handleSend(phrase)}
-              className="px-2.5 py-1 rounded-full bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#1C1C1E] text-[11px] whitespace-nowrap transition-colors"
+              className="px-3 py-1.5 rounded-[12px] bg-[#F2F2F7] hover:bg-[#E5E5EA] text-[#1C1C1E] text-[11px] whitespace-nowrap transition-colors"
             >
               {phrase}
             </button>
           ))}
         </div>
 
-        {/* Messages List (iMessage Bubbles) */}
+        {/* Messages List */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-[#FCFCFD]">
           {filteredMessages.length === 0 ? (
             <div className="text-center text-[#8E8E93] py-12 text-xs">
-              Belum ada pesan di saluran ini.
+              Masih sepi nih, kirim pesan pertama lo 💬
             </div>
           ) : (
             filteredMessages.map((msg) => {
@@ -122,9 +122,9 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
                     </span>
                   </div>
                   <div
-                    className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
+                    className={`max-w-[80%] rounded-[16px] px-3.5 py-2 text-xs leading-relaxed ${
                       isMe
-                        ? 'bg-[#007AFF] text-white rounded-br-xs'
+                        ? 'bg-[#5B4FE9] text-white rounded-br-xs'
                         : 'bg-[#E5E5EA] text-[#1C1C1E] rounded-bl-xs'
                     }`}
                   >
@@ -136,7 +136,7 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
           )}
         </div>
 
-        {/* Input Bar (iMessage Bar) */}
+        {/* Input Bar */}
         <div className="p-3 border-t border-[#F2F2F7] bg-white">
           <form
             onSubmit={(e) => {
@@ -150,12 +150,12 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Ketik pesan..."
-              className="flex-1 bg-[#F2F2F7] border border-[#E5E5EA] rounded-full px-4 py-2 text-xs text-[#1C1C1E] placeholder-[#8E8E93] focus:outline-none focus:ring-1 focus:ring-[#007AFF]"
+              className="flex-1 bg-[#F2F2F7] border border-[#E5E5EA] rounded-full px-4 py-2 text-xs text-[#1C1C1E] placeholder-[#8E8E93] focus:outline-none focus:ring-1 focus:ring-[#5B4FE9]"
             />
             <button
               type="submit"
               disabled={!inputText.trim()}
-              className="w-8 h-8 rounded-full bg-[#007AFF] hover:bg-[#0062CC] disabled:opacity-30 text-white flex items-center justify-center transition-all shrink-0 cursor-pointer"
+              className="w-9 h-9 rounded-full bg-[#5B4FE9] hover:bg-[#4A3FD8] disabled:opacity-30 text-white flex items-center justify-center transition-all shrink-0 cursor-pointer"
             >
               <ArrowUp className="w-4 h-4 stroke-[2.5]" />
             </button>

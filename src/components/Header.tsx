@@ -64,32 +64,55 @@ export const Header: React.FC<HeaderProps> = ({
   const activeRoleConfig = ROLE_CONFIGS.find((r) => r.key === currentRole) || ROLE_CONFIGS[0];
 
   return (
-    <header className="bg-white/80 backdrop-blur-md border-b border-[#E5E5EA] px-4 py-2.5 sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
+    <header className="bg-white/80 backdrop-blur-md border-b border-[#E5E5EA] px-4 py-3 sticky top-0 z-40">
+      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
         {/* Brand & Subtitle */}
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#1C1C1E] text-white flex items-center justify-center font-bold text-base shadow-xs tracking-tight">
-            78
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          <div className="w-10 h-10 rounded-[24px] bg-[#1A1B2E] text-white flex items-center justify-center font-bold text-base shadow-sm tracking-tight">
+            WS
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-bold text-base tracking-tight text-[#1C1C1E]">
-                Kafe 78
+            <div className="flex items-center gap-2 min-w-0">
+              <h1 className="font-bold text-sm sm:text-base tracking-tight text-[#1C1C1E] truncate">
+                Warung Sontoloyo
               </h1>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-[#E5E5EA] text-[#3A3A3C]">
+              <span className="hidden sm:inline text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#E5E5EA] text-[#3A3A3C]">
                 POS
               </span>
             </div>
-            <p className="text-[11px] text-[#8E8E93] leading-none mt-0.5">
+            <p className="hidden sm:block text-[11px] text-[#8E8E93] leading-none mt-0.5 truncate">
               Sistem Kasir & Restoran · <span className="uppercase font-mono text-[10px]">{stokMode}</span>
             </p>
           </div>
         </div>
 
+        {/* Center Nav Pill (Finnova style) */}
+        <nav className="hidden lg:flex items-center gap-0.5 px-2 bg-[#1A1B2E] rounded-[16px] border border-[#25263B]/50 shadow-inner overflow-x-auto">
+          {[
+            { label: 'Ringkasan', key: 'overview' },
+            { label: 'Pesanan', key: 'estimates' },
+            { label: 'Kasir', key: 'invoices', active: true },
+            { label: 'Pembayaran', key: 'payments' },
+            { label: 'Langganan', key: 'recurring' },
+            { label: 'Checkout', key: 'checkouts' },
+          ].map((item) => (
+            <button
+              key={item.key}
+              className={`shrink-0 px-3 py-1.5 rounded-[12px] text-xs font-medium transition-all duration-200 ${
+                item.active
+                  ? 'bg-[#5B4FE9] text-white shadow-sm'
+                  : 'text-[#8E8E93] hover:text-[#B0B0C3] hover:bg-[#1A1B2E]/40'
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
         {/* Status & Actions */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Tables Status (iOS Grouped Pill) */}
-          <div className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[#F2F2F7] border border-[#E5E5EA] text-xs">
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+          {/* Tables Status */}
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#F2F2F7] border border-[#E5E5EA] text-xs">
             <span className="w-2 h-2 rounded-full bg-[#34C759]"></span>
             <span className="text-[#636366]">Meja:</span>
             <span className="font-semibold text-[#1C1C1E] font-mono">
@@ -98,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Clock */}
-          <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#F2F2F7] border border-[#E5E5EA] text-xs font-mono text-[#636366]">
+          <div className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#F2F2F7] border border-[#E5E5EA] text-xs font-mono text-[#636366]">
             <Clock className="w-3.5 h-3.5 text-[#8E8E93]" />
             <span>{timeStr || '00:00:00'}</span>
           </div>
@@ -150,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({
             aria-label={soundEnabled ? 'Matikan Audio' : 'Nyalakan Audio'}
             className={`p-2 rounded-lg border text-xs transition-colors flex items-center justify-center cursor-pointer ${
               soundEnabled
-                ? 'bg-white text-[#007AFF] border-[#D1D1D6] hover:bg-[#F2F2F7]'
+                ? 'bg-white text-[#5B4FE9] border-[#D1D1D6] hover:bg-[#F2F2F7]'
                 : 'bg-[#F2F2F7] text-[#8E8E93] border-[#E5E5EA] hover:text-[#3A3A3C]'
             }`}
           >
@@ -163,7 +186,7 @@ export const Header: React.FC<HeaderProps> = ({
             aria-label="Buka Chat Tim Internal"
             className="relative px-3 py-1.5 rounded-lg bg-white border border-[#D1D1D6] hover:bg-[#F2F2F7] text-[#1C1C1E] text-xs font-medium transition-colors flex items-center gap-1.5 shadow-2xs cursor-pointer"
           >
-            <MessageSquare className="w-3.5 h-3.5 text-[#007AFF]" />
+            <MessageSquare className="w-3.5 h-3.5 text-[#5B4FE9]" />
             <span className="hidden sm:inline">Pesan Tim</span>
             {unreadChatCount > 0 && (
               <span className="ml-0.5 px-1.5 py-0.2 bg-[#FF3B30] text-white rounded-full text-[10px] font-bold">
@@ -172,17 +195,20 @@ export const Header: React.FC<HeaderProps> = ({
             )}
           </button>
 
-          {/* Active Role Selector (Switch PIN) */}
+          {/* Active Role Selector */}
           <button
             onClick={onOpenPinModal}
             aria-label="Ganti Hak Akses / Kunci"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white border border-[#D1D1D6] hover:border-[#AEAEB2] text-[#1C1C1E] text-xs font-medium transition-all shadow-2xs cursor-pointer"
+            className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-white border border-[#D1D1D6] hover:border-[#AEAEB2] text-[#1C1C1E] text-xs font-medium transition-all shadow-2xs cursor-pointer shrink-0"
           >
-            <Shield className="w-3.5 h-3.5 text-[#007AFF]" />
-            <div className="text-left leading-tight">
+            <Shield className="w-3.5 h-3.5 text-[#5B4FE9]" />
+            <div className="text-left leading-tight hidden sm:block">
               <span className="text-[10px] text-[#8E8E93] block">Peran</span>
               <span className="font-semibold text-[#1C1C1E]">{activeRoleConfig.name}</span>
             </div>
+            <span className="sm:hidden font-semibold text-[#1C1C1E] max-w-[80px] truncate">
+              {activeRoleConfig.name}
+            </span>
             <ChevronRight className="w-3 h-3 text-[#AEAEB2] ml-0.5" />
           </button>
 

@@ -177,7 +177,7 @@ export default function App() {
       createdAt: Date.now(),
       status: 'dapur',
       paymentStatus: 'unpaid',
-      waiterName: `${currentRole === 'waiter' ? 'Waiter' : 'Staf Kafe 78'}`,
+      waiterName: `${currentRole === 'waiter' ? 'Waiter' : 'Staf Warung Sontoloyo'}`,
     };
 
     // Deduct stock
@@ -247,7 +247,7 @@ export default function App() {
         ...prev,
         {
           id: `chat-${Date.now()}`,
-          sender: 'Dapur 78',
+          sender: 'Dapur Sontoloyo',
           role: 'dapur',
           channel: 'waiter-antar',
           text: `Pesanan Meja ${targetOrder.meja} (${targetOrder.id}) telah matang dan siap diambil di counter!`,
@@ -306,7 +306,7 @@ export default function App() {
       cashGiven,
       change,
       paidAt: Date.now(),
-      cashierName: `${currentRole === 'kasir' ? 'Kasir 78' : 'Kasir Staf'}`,
+      cashierName: `${currentRole === 'kasir' ? 'Kasir Sontoloyo' : 'Kasir Staf'}`,
     };
 
     setOrders((prev) => prev.filter((o) => o.id !== orderId));
@@ -317,7 +317,7 @@ export default function App() {
       ...prev,
       {
         id: `chat-${Date.now()}`,
-        sender: 'Kasir 78',
+        sender: 'Kasir Sontoloyo',
         role: 'kasir',
         channel: 'kasir',
         text: `Pembayaran Meja ${target.meja} (${paidOrder.id}) senilai ${paidOrder.total.toLocaleString(
@@ -361,7 +361,7 @@ export default function App() {
       ...prev,
       {
         id: `chat-${Date.now()}`,
-        sender: 'Kasir 78',
+        sender: 'Kasir Sontoloyo',
         role: 'kasir',
         channel: 'dapur',
         text: `Pesanan customer ${target.meja} (${target.id}) disetujui dan diteruskan ke dapur.`,
@@ -391,7 +391,7 @@ export default function App() {
         status: 'selesai',
         paymentStatus: 'paid',
         paidAt: Date.now(),
-        cashierName: 'Kasir 78',
+        cashierName: 'Kasir Sontoloyo',
       }));
       setCompletedOrders((prev) => [...paidOrders, ...prev]);
       setOrders((prev) => prev.filter((o) => o.sessionId !== sessionId));
@@ -470,7 +470,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F2F2F7] text-[#1C1C1E] flex flex-col font-sans selection:bg-[#007AFF] selection:text-white pb-16">
+    <div className="min-h-screen bg-[#F2F2F7] text-[#1C1C1E] flex flex-col font-sans selection:bg-[#5B4FE9] selection:text-white pb-16">
       {/* Top Header */}
       <Header
         currentRole={currentRole}

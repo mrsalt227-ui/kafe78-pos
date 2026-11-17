@@ -59,7 +59,7 @@ export const CustomerServiceModule: React.FC<CustomerServiceModuleProps> = ({
   return (
     <div className="max-w-4xl mx-auto px-4 py-4">
       <div className="flex items-center gap-2 mb-3">
-        <div className="w-9 h-9 rounded-xl bg-[#EAF4FF] text-[#007AFF] flex items-center justify-center">
+        <div className="w-9 h-9 rounded-xl bg-[#EAF4FF] text-[#5B4FE9] flex items-center justify-center">
           <Utensils className="w-4 h-4" />
         </div>
         <div>
@@ -77,12 +77,12 @@ export const CustomerServiceModule: React.FC<CustomerServiceModuleProps> = ({
               tab === id ? 'bg-white text-[#1C1C1E] font-semibold shadow-xs' : 'text-[#636366]'
             }`}
           >
-            <Icon className={`w-3.5 h-3.5 ${tab === id ? 'text-[#007AFF]' : 'text-[#8E8E93]'}`} />
+            <Icon className={`w-3.5 h-3.5 ${tab === id ? 'text-[#5B4FE9]' : 'text-[#8E8E93]'}`} />
             <span className="hidden sm:inline">{label}</span>
             {count > 0 && (
               <span
                 className={`text-[10px] font-bold px-1.5 rounded-full min-w-4 text-center ${
-                  tab === id ? 'bg-[#007AFF] text-white' : 'bg-[#8E8E93] text-white'
+                  tab === id ? 'bg-[#5B4FE9] text-white' : 'bg-[#8E8E93] text-white'
                 }`}
               >
                 {count}
@@ -95,14 +95,14 @@ export const CustomerServiceModule: React.FC<CustomerServiceModuleProps> = ({
       {tab === 'approval' && (
         <div className="space-y-3">
           {pendingApprovals.length === 0 && (
-            <div className="text-center py-14 bg-white rounded-2xl border border-[#E5E5EA]">
+            <div className="text-center py-14 bg-white rounded-[24px] border border-[#E5E5EA]">
               <CheckCircle2 className="w-8 h-8 text-[#34C759] mx-auto mb-2" />
-              <p className="text-sm text-[#8E8E93]">Tidak ada pesanan menunggu persetujuan.</p>
+              <p className="text-sm text-[#8E8E93]">Belum ada pesanan nunggu oke-in 👍</p>
             </div>
           )}
 
           {pendingApprovals.map((order) => (
-            <div key={order.id} className="bg-white rounded-2xl border border-[#E5E5EA] p-3.5">
+            <div key={order.id} className="bg-white rounded-[24px] border border-[#E5E5EA] p-3.5">
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <p className="text-sm font-bold">
@@ -189,16 +189,16 @@ export const CustomerServiceModule: React.FC<CustomerServiceModuleProps> = ({
       {tab === 'calls' && (
         <div className="space-y-2.5">
           {openCalls.length === 0 && (
-            <div className="text-center py-14 bg-white rounded-2xl border border-[#E5E5EA]">
+            <div className="text-center py-14 bg-white rounded-[24px] border border-[#E5E5EA]">
               <BellRing className="w-8 h-8 text-[#C7C7CC] mx-auto mb-2" />
-              <p className="text-sm text-[#8E8E93]">Tidak ada panggilan aktif.</p>
+              <p className="text-sm text-[#8E8E93]">Gak ada panggilan aktif, adem 🧘</p>
             </div>
           )}
 
           {openCalls.map((call) => (
             <div
               key={call._key}
-              className="bg-white rounded-2xl border border-[#FF9500]/30 p-3.5 flex items-center gap-3"
+              className="bg-white rounded-[24px] border border-[#FF9500]/30 p-3.5 flex items-center gap-3"
             >
               <div className="w-10 h-10 rounded-xl bg-[#FFF4E5] text-[#C76B00] flex items-center justify-center shrink-0">
                 <BellRing className="w-5 h-5" />
