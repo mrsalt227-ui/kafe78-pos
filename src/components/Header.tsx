@@ -86,29 +86,6 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Center Nav Pill (Finnova style) */}
-        <nav className="hidden lg:flex items-center gap-0.5 px-2 bg-[#1A1B2E] rounded-[16px] border border-[#25263B]/50 shadow-inner overflow-x-auto">
-          {[
-            { label: 'Ringkasan', key: 'overview' },
-            { label: 'Pesanan', key: 'estimates' },
-            { label: 'Kasir', key: 'invoices', active: true },
-            { label: 'Pembayaran', key: 'payments' },
-            { label: 'Langganan', key: 'recurring' },
-            { label: 'Checkout', key: 'checkouts' },
-          ].map((item) => (
-            <button
-              key={item.key}
-              className={`shrink-0 px-3 py-1.5 rounded-[12px] text-xs font-medium transition-all duration-200 ${
-                item.active
-                  ? 'bg-[#5B4FE9] text-white shadow-sm'
-                  : 'text-[#8E8E93] hover:text-[#B0B0C3] hover:bg-[#1A1B2E]/40'
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
-
         {/* Status & Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           {/* Tables Status */}
