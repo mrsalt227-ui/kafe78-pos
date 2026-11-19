@@ -37,6 +37,7 @@ import {
   closeSession,
   ensureTablesSeeded,
   pushOrderAtomic,
+  updateClaimStatus,
   useRemoteList,
 } from './lib/customerOrdering';
 
@@ -286,7 +287,7 @@ export default function App() {
   };
 
   // Handlers: Kasir / Payment
-  const handleProcessPayment = (
+  const handleProcessPayment = async (
     orderId: string,
     method: 'Tunai' | 'QRIS' | 'Transfer',
     cashGiven: number,
@@ -295,6 +296,13 @@ export default function App() {
   ) => {
     const target = orders.find((o) => o.id === orderId);
     if (!target) return;
+
+    // Verifikasi klaim pembayaran pending untuk meja ini agar notifikasi di
+    // tab pelanggan (layanan) tidak tetap menyala setelah pembayaran selesai.
+    const matchingClaims = paymentClaims.filter(
+      (c) => c.status === 'pending' && c.tableName === target.meja
+    );
+    await Promise.all(matchingClaims.map((c) => updateClaimStatus(c.id, 'verified')));
 
     const paidOrder: Order = {
       ...target,

@@ -33,9 +33,9 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
   soundEnabled,
 }) => {
   const unpaidOrders = useMemo(() => {
-    // Hanya tampilkan tagihan untuk pesanan yang sudah diantar (atau selesai).
-    // Pesanan yang masih menunggu approval/di dapur/siap antar belum boleh
-    // ditagih di kasir.
+    // Hanya tampilkan tagihan untuk pesanan yang statusnya belum diverifikasi
+    // (paymentStatus masih 'unpaid'). Kalau sudah 'paid' / 'verified' otomatis
+    // tutup sesi & jangan tampilkan di kasir.
     return orders.filter(
       (o) => o.paymentStatus === 'unpaid' && (o.status === 'diantar' || o.status === 'selesai')
     );
