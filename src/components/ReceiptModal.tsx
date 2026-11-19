@@ -57,10 +57,6 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ order, onClose }) =>
               <span>Meja:</span>
               <span className="font-bold">MEJA {order.meja}</span>
             </div>
-            <div className="flex justify-between text-[#636366]">
-              <span>Kasir:</span>
-              <span>{order.cashierName || 'Kasir'}</span>
-            </div>
           </div>
 
           <div className="py-3 border-b border-dashed border-[#D1D1D6] space-y-1.5">

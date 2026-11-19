@@ -3,24 +3,18 @@ import {
   BarChart3, 
   LineChart as LineChartIcon,
   TrendingUp, 
-  Download, 
-  Eye,
-  Calendar,
+  Download,
   CreditCard,
-  Coffee,
   Clock,
-  Award,
   Layers,
-  ArrowUpRight,
   Search,
-  Filter,
-  DollarSign,
   UtensilsCrossed,
   Sparkles,
-  Percent,
-  TrendingDown,
-  Bot,
-  PieChart
+  DollarSign,
+  CheckCircle2,
+  Receipt,
+  Award,
+  Eye
 } from 'lucide-react';
 import { Order, MenuItem, formatRupiah, calculateHppAndProfit } from '../utils/pos';
 import { ReceiptModal } from './ReceiptModal';
@@ -446,72 +440,81 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
         </div>
       </div>
 
-      {/* Primary KPI Apple Metric Cards */}
+      {/* Primary KPI Metric Cards — glassy gradient accent */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {/* Total Omzet */}
-        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs hover:shadow-xs transition-all">
-          <div className="flex items-center justify-between text-[#8E8E93] mb-1">
-            <span className="text-xs font-medium">Total Omzet Penjualan</span>
-            <span className="text-[10px] font-semibold text-[#34C759] flex items-center gap-0.5 bg-[#34C759]/10 px-1.5 py-0.5 rounded-md">
-              {growthRate === null ? (
-                <span className="text-[#8E8E93] bg-[#8E8E93]/10 px-1.5 py-0.5 rounded-md">—</span>
-              ) : (
-                <>
-                  <ArrowUpRight className="w-3 h-3" /> {growthRate >= 0 ? '+' : ''}
-                  {growthRate}%
-                </>
-              )}
+        <div className="relative overflow-hidden bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs hover:shadow-md transition-all duration-300 group">
+          <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-[#5B4FE9]/10 group-hover:scale-125 transition-transform duration-500" />
+          <div className="flex items-center justify-between text-[#8E8E93] mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wide">Total Omzet</span>
+            <span className="w-8 h-8 rounded-xl bg-[#5B4FE9]/10 text-[#5B4FE9] flex items-center justify-center">
+              <DollarSign className="w-4 h-4" />
             </span>
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold font-mono text-[#5B4FE9] tracking-tight">
             {formatRupiah(totalRevenue)}
           </div>
-          <div className="text-[11px] text-[#8E8E93] mt-1.5 flex items-center gap-1">
-            <Clock className="w-3 h-3" />
-            {period === 'today' ? 'Hari ini' : period === 'week' ? '7 hari kalender' : 'Seluruh periode'}
+          <div className="flex items-center gap-1.5 mt-2">
+            {growthRate === null ? (
+              <span className="text-[10px] font-semibold text-[#8E8E93] bg-[#8E8E93]/10 px-2 py-0.5 rounded-full">—</span>
+            ) : (
+              <span className={`text-[10px] font-semibold flex items-center gap-1 px-2 py-0.5 rounded-full ${growthRate >= 0 ? 'bg-[#34C759]/10 text-[#34C759]' : 'bg-[#FF3B30]/10 text-[#FF3B30]'}`}>
+                <TrendingUp className="w-3 h-3" /> {growthRate >= 0 ? '+' : ''}{growthRate}%
+              </span>
+            )}
+            <span className="text-[10px] text-[#8E8E93]">
+              {period === 'today' ? 'vs kemarin' : period === 'week' ? 'vs minggu lalu' : 'seluruh periode'}
+            </span>
           </div>
         </div>
 
         {/* Transaksi Lunas */}
-        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs hover:shadow-xs transition-all">
-          <div className="flex items-center justify-between text-[#8E8E93] mb-1">
-            <span className="text-xs font-medium">Transaksi Lunas</span>
-            <span className="w-5 h-5 rounded-full bg-[#5B4FE9]/10 text-[#5B4FE9] flex items-center justify-center text-[10px] font-bold">
-              ✓
+        <div className="relative overflow-hidden bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs hover:shadow-md transition-all duration-300 group">
+          <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-[#34C759]/10 group-hover:scale-125 transition-transform duration-500" />
+          <div className="flex items-center justify-between text-[#8E8E93] mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wide">Transaksi Lunas</span>
+            <span className="w-8 h-8 rounded-xl bg-[#34C759]/10 text-[#34C759] flex items-center justify-center">
+              <CheckCircle2 className="w-4 h-4" />
             </span>
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold font-mono text-[#1C1C1E] tracking-tight">
             {totalTransactions} <span className="text-sm font-sans font-medium text-[#8E8E93]">struk</span>
           </div>
-          <div className="text-[11px] text-[#636366] mt-1.5">
+          <div className="text-[11px] text-[#636366] mt-2">
             Selesai disajikan & lunas dibayar
           </div>
         </div>
 
         {/* AOV (Average Order Value) */}
-        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs hover:shadow-xs transition-all">
-          <div className="flex items-center justify-between text-[#8E8E93] mb-1">
-            <span className="text-xs font-medium">Rata-rata Order (AOV)</span>
-            <DollarSign className="w-3.5 h-3.5 text-[#8E8E93]" />
+        <div className="relative overflow-hidden bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs hover:shadow-md transition-all duration-300 group">
+          <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-[#FF9500]/10 group-hover:scale-125 transition-transform duration-500" />
+          <div className="flex items-center justify-between text-[#8E8E93] mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wide">Rata-rata Order</span>
+            <span className="w-8 h-8 rounded-xl bg-[#FF9500]/10 text-[#FF9500] flex items-center justify-center">
+              <Receipt className="w-4 h-4" />
+            </span>
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold font-mono text-[#1C1C1E] tracking-tight">
             {formatRupiah(avgOrderValue)}
           </div>
-          <div className="text-[11px] text-[#636366] mt-1.5">
+          <div className="text-[11px] text-[#636366] mt-2">
             Rata-rata belanja per meja/tamu
           </div>
         </div>
 
         {/* Total Item Terjual */}
-        <div className="bg-white border border-[#E5E5EA] rounded-[24px] p-4 shadow-2xs hover:shadow-xs transition-all">
-          <div className="flex items-center justify-between text-[#8E8E93] mb-1">
-            <span className="text-xs font-medium">Porsi Terjual</span>
-            <UtensilsCrossed className="w-3.5 h-3.5 text-[#8E8E93]" />
+        <div className="relative overflow-hidden bg-white border border-[#E5E5EA] rounded-[24px] p-5 shadow-2xs hover:shadow-md transition-all duration-300 group">
+          <div className="absolute -top-8 -right-8 w-24 h-24 rounded-full bg-[#FF3B30]/10 group-hover:scale-125 transition-transform duration-500" />
+          <div className="flex items-center justify-between text-[#8E8E93] mb-2">
+            <span className="text-xs font-semibold uppercase tracking-wide">Porsi Terjual</span>
+            <span className="w-8 h-8 rounded-xl bg-[#FF3B30]/10 text-[#FF3B30] flex items-center justify-center">
+              <UtensilsCrossed className="w-4 h-4" />
+            </span>
           </div>
           <div className="text-2xl sm:text-3xl font-extrabold font-mono text-[#1C1C1E] tracking-tight">
             {totalItemsSold} <span className="text-sm font-sans font-medium text-[#8E8E93]">porsi</span>
           </div>
-          <div className="text-[11px] text-[#636366] mt-1.5">
+          <div className="text-[11px] text-[#636366] mt-2">
             Kombinasi minuman & makanan
           </div>
         </div>
@@ -1028,8 +1031,8 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
       </div>
 
       {/* Transaction History Table with Filter & Search */}
-      <div className="bg-white border border-[#E5E5EA] rounded-[24px] overflow-hidden shadow-2xs p-5 space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-[#F2F2F7] pb-3">
+      <div className="bg-white border border-[#E5E5EA] rounded-[24px] overflow-hidden shadow-2xs p-4 sm:p-5 space-y-4">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-[#F2F2F7] pb-3">
           <div>
             <h3 className="font-bold text-sm text-[#1C1C1E]">Riwayat Struk & Pembayaran</h3>
             <p className="text-xs text-[#8E8E93]">
@@ -1037,26 +1040,26 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
             </p>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 w-full lg:w-auto">
             {/* Search Box */}
-            <div className="relative">
+            <div className="relative w-full sm:w-56">
               <Search className="w-3.5 h-3.5 text-[#8E8E93] absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Cari meja, tiket, menu..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-8 pr-3 py-1.5 rounded-xl border border-[#D1D1D6] text-xs focus:outline-none focus:border-[#5B4FE9] bg-[#F2F2F7] focus:bg-white w-48 sm:w-56"
+                className="pl-8 pr-3 py-2 rounded-xl border border-[#D1D1D6] text-xs focus:outline-none focus:border-[#5B4FE9] bg-[#F2F2F7] focus:bg-white w-full"
               />
             </div>
 
             {/* Filter by Payment Method */}
-            <div className="bg-[#F2F2F7] p-1 rounded-xl flex items-center gap-1">
+            <div className="bg-[#F2F2F7] p-1 rounded-xl flex items-center gap-1 overflow-x-auto shrink-0">
               {(['all', 'Tunai', 'QRIS', 'Transfer'] as const).map((m) => (
                 <button
                   key={m}
                   onClick={() => setPaymentFilter(m)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+                  className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                     paymentFilter === m
                       ? 'bg-white text-[#1C1C1E] font-semibold shadow-2xs'
                       : 'text-[#636366] hover:text-[#1C1C1E]'
@@ -1069,91 +1072,154 @@ export const ReportModule: React.FC<ReportModuleProps> = ({ completedOrders, men
           </div>
         </div>
 
-        {/* Table Content */}
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-[#1C1C1E]">
-            <thead className="bg-[#F2F2F7] text-[#636366] font-semibold border-b border-[#E5E5EA]">
-              <tr>
-                <th className="py-2.5 px-3">Tiket ID</th>
-                <th className="py-2.5 px-3">Meja</th>
-                <th className="py-2.5 px-3">Kasir / Waiter</th>
-                <th className="py-2.5 px-3">Daftar Menu</th>
-                <th className="py-2.5 px-3">Metode</th>
-                <th className="py-2.5 px-3">Total Nominal</th>
-                <th className="py-2.5 px-3">Waktu</th>
-                <th className="py-2.5 px-3 text-right">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#F2F2F7]">
-              {tableTransactions.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="py-8 text-center text-xs text-[#8E8E93]">
-                    Gak nemu transaksi yang cocok sama filter lo 🤔
-                  </td>
-                </tr>
-              ) : (
-                tableTransactions.map((ord) => (
-                  <tr key={ord.id} className="hover:bg-[#F8F8FA] transition-colors">
-                    <td className="py-2.5 px-3 font-mono font-bold text-[#5B4FE9]">
-                      {ord.id}
-                    </td>
-                    <td className="py-2.5 px-3">
-                      <span className="font-semibold px-2 py-0.5 rounded-md bg-[#E5E5EA] text-[#1C1C1E]">
-                        Meja {ord.meja}
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 text-[#636366]">
-                      <div className="font-medium text-[#1C1C1E]">{ord.cashierName || 'Kasir'}</div>
-                      <div className="text-[10px] text-[#8E8E93]">{ord.waiterName || 'Staff'}</div>
-                    </td>
-                    <td className="py-2.5 px-3 text-[#636366] max-w-xs truncate" title={ord.items.map((it) => `${it.qty}× ${it.n}`).join(', ')}>
-                      {ord.items.map((it) => `${it.qty}× ${it.n}`).join(', ')}
-                    </td>
-                    <td className="py-2.5 px-3">
-                      <span
-                        className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
-                          ord.paymentMethod === 'QRIS'
-                            ? 'bg-[#5B4FE9]/10 text-[#5B4FE9]'
-                            : ord.paymentMethod === 'Transfer'
-                            ? 'bg-[#5856D6]/10 text-[#5856D6]'
-                            : 'bg-[#34C759]/10 text-[#34C759]'
-                        }`}
-                      >
-                        {ord.paymentMethod || 'Tunai'}
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 font-mono font-bold text-[#1C1C1E]">
-                      {formatRupiah(ord.total)}
-                    </td>
-                    <td className="py-2.5 px-3 text-[#8E8E93] whitespace-nowrap">
-                      <div>
+        {tableTransactions.length === 0 ? (
+          <div className="py-10 text-center text-xs text-[#8E8E93]">
+            Gak nemu transaksi yang cocok sama filter lo 🤔
+          </div>
+        ) : (
+          <>
+            {/* ===== MOBILE: card list ===== */}
+            <div className="lg:hidden space-y-2.5">
+              {tableTransactions.map((ord) => (
+                <div
+                  key={ord.id}
+                  className="rounded-2xl border border-[#E5E5EA] bg-white p-3 space-y-2"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-mono font-bold text-[11px] text-[#5B4FE9]">
+                          {ord.id}
+                        </span>
+                        <span className="font-semibold text-[10px] px-1.5 py-0.5 rounded-md bg-[#F2F2F7] text-[#1C1C1E]">
+                          Meja {ord.meja}
+                        </span>
+                        <span
+                          className={`px-1.5 py-0.5 rounded-md text-[10px] font-bold ${
+                            ord.paymentMethod === 'QRIS'
+                              ? 'bg-[#5B4FE9]/10 text-[#5B4FE9]'
+                              : ord.paymentMethod === 'Transfer'
+                              ? 'bg-[#5856D6]/10 text-[#5856D6]'
+                              : 'bg-[#34C759]/10 text-[#34C759]'
+                          }`}
+                        >
+                          {ord.paymentMethod || 'Tunai'}
+                        </span>
+                      </div>
+                      <div className="text-[10px] text-[#8E8E93] mt-1">
+                        {new Date(ord.paidAt || ord.createdAt).toLocaleDateString('id-ID', {
+                          day: 'numeric',
+                          month: 'short',
+                        })}
+                        {' · '}
                         {new Date(ord.paidAt || ord.createdAt).toLocaleTimeString('id-ID', {
                           hour: '2-digit',
                           minute: '2-digit',
                         })}
                       </div>
-                      <div className="text-[10px]">
-                        {new Date(ord.paidAt || ord.createdAt).toLocaleDateString('id-ID', {
-                          day: 'numeric',
-                          month: 'short',
-                        })}
-                      </div>
-                    </td>
-                    <td className="py-2.5 px-3 text-right">
-                      <button
-                        onClick={() => setSelectedReceipt(ord)}
-                        className="px-2.5 py-1 rounded-lg bg-[#5B4FE9]/10 hover:bg-[#5B4FE9]/20 text-[#5B4FE9] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer transition-all"
-                      >
-                        <Eye className="w-3.5 h-3.5" />
-                        Struk
-                      </button>
-                    </td>
+                    </div>
+                    <button
+                      onClick={() => setSelectedReceipt(ord)}
+                      className="shrink-0 px-2.5 py-1.5 rounded-lg bg-[#5B4FE9]/10 active:bg-[#5B4FE9]/20 text-[#5B4FE9] text-[11px] font-semibold inline-flex items-center gap-1 cursor-pointer transition-all"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      Struk
+                    </button>
+                  </div>
+
+                  <p className="text-[11px] text-[#636366] leading-relaxed line-clamp-2">
+                    {ord.items.map((it) => `${it.qty}× ${it.n}`).join(', ')}
+                  </p>
+
+                  <div className="flex items-center justify-between pt-1.5 border-t border-[#F2F2F7]">
+                    <span className="text-[10px] uppercase tracking-wide text-[#8E8E93] font-semibold">
+                      Total
+                    </span>
+                    <span className="font-mono font-bold text-sm text-[#1C1C1E]">
+                      {formatRupiah(ord.total)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* ===== DESKTOP: table ===== */}
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="w-full text-left text-xs text-[#1C1C1E]">
+                <thead className="bg-[#F2F2F7] text-[#636366] font-semibold border-b border-[#E5E5EA]">
+                  <tr>
+                    <th className="py-2.5 px-3">Tiket ID</th>
+                    <th className="py-2.5 px-3">Meja</th>
+                    <th className="py-2.5 px-3">Daftar Menu</th>
+                    <th className="py-2.5 px-3">Metode</th>
+                    <th className="py-2.5 px-3">Total Nominal</th>
+                    <th className="py-2.5 px-3">Waktu</th>
+                    <th className="py-2.5 px-3 text-right">Aksi</th>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                </thead>
+                <tbody className="divide-y divide-[#F2F2F7]">
+                  {tableTransactions.map((ord) => (
+                    <tr key={ord.id} className="hover:bg-[#F8F8FA] transition-colors">
+                      <td className="py-2.5 px-3 font-mono font-bold text-[#5B4FE9] whitespace-nowrap">
+                        {ord.id}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <span className="font-semibold px-2 py-0.5 rounded-md bg-[#E5E5EA] text-[#1C1C1E] whitespace-nowrap">
+                          Meja {ord.meja}
+                        </span>
+                      </td>
+                      <td
+                        className="py-2.5 px-3 text-[#636366] max-w-xs truncate"
+                        title={ord.items.map((it) => `${it.qty}× ${it.n}`).join(', ')}
+                      >
+                        {ord.items.map((it) => `${it.qty}× ${it.n}`).join(', ')}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <span
+                          className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                            ord.paymentMethod === 'QRIS'
+                              ? 'bg-[#5B4FE9]/10 text-[#5B4FE9]'
+                              : ord.paymentMethod === 'Transfer'
+                              ? 'bg-[#5856D6]/10 text-[#5856D6]'
+                              : 'bg-[#34C759]/10 text-[#34C759]'
+                          }`}
+                        >
+                          {ord.paymentMethod || 'Tunai'}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3 font-mono font-bold text-[#1C1C1E] whitespace-nowrap">
+                        {formatRupiah(ord.total)}
+                      </td>
+                      <td className="py-2.5 px-3 text-[#8E8E93] whitespace-nowrap">
+                        <div>
+                          {new Date(ord.paidAt || ord.createdAt).toLocaleTimeString('id-ID', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </div>
+                        <div className="text-[10px]">
+                          {new Date(ord.paidAt || ord.createdAt).toLocaleDateString('id-ID', {
+                            day: 'numeric',
+                            month: 'short',
+                          })}
+                        </div>
+                      </td>
+                      <td className="py-2.5 px-3 text-right">
+                        <button
+                          onClick={() => setSelectedReceipt(ord)}
+                          className="px-2.5 py-1 rounded-lg bg-[#5B4FE9]/10 hover:bg-[#5B4FE9]/20 text-[#5B4FE9] text-xs font-semibold inline-flex items-center gap-1 cursor-pointer transition-all"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                          Struk
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Printable Thermal Receipt Sheet Modal */}
