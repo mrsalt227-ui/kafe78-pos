@@ -297,6 +297,9 @@ export default function App() {
     const target = orders.find((o) => o.id === orderId);
     if (!target) return;
 
+    // ⛔ Cegah double verification: kalau order sudah paid, hentikan
+    if (target.paymentStatus === 'paid') return;
+
     // Verifikasi klaim pembayaran pending untuk meja ini agar notifikasi di
     // tab pelanggan (layanan) tidak tetap menyala setelah pembayaran selesai.
     const matchingClaims = paymentClaims.filter(
@@ -320,6 +323,9 @@ export default function App() {
     setOrders((prev) => prev.filter((o) => o.id !== orderId));
     setCompletedOrders((prev) => [paidOrder, ...prev]);
     setReceiptModalOrder(paidOrder);
+
+    // ✅ OTomatis tutup sesi meja setelah pembayaran berhasil (tanpa mengganti alur tunai/tombol manual)
+    onSettleSession?.(target.sessionId || target.id);
 
     setChatMessages((prev) => [
       ...prev,
