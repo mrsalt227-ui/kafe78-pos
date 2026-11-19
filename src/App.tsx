@@ -325,7 +325,7 @@ export default function App() {
     setReceiptModalOrder(paidOrder);
 
     // ✅ OTomatis tutup sesi meja setelah pembayaran berhasil (tanpa mengganti alur tunai/tombol manual)
-    onSettleSession?.(target.sessionId || target.id);
+    handleSettleSession?.(target.sessionId || target.id);
 
     setChatMessages((prev) => [
       ...prev,

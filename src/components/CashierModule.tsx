@@ -402,6 +402,12 @@ export const CashierModule: React.FC<CashierModuleProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => {
+                      // Cari order yang cocok dengan klaim (berdasarkan sessionId dan paymentStatus unpaid)
+                      const order = orders.find(o => o.sessionId === claim.sessionId && o.paymentStatus !== 'paid');
+                      if (!order) return;
+                      // Panggil onProcessPayment dengan method dari klaim, cashGiven = claim.amount, change = 0, discount = 0
+                      onProcessPayment(order.id, claim.method, claim.amount, 0, 0);
+                      // Verifikasi klaim juga (untuk safety, onProcessPayment sudah melakukannya)
                       updateClaimStatus(claim.id, 'verified');
                       soundEffects.cash();
                     }}

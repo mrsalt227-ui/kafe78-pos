@@ -447,9 +447,11 @@ export async function updateClaimStatus(
   claimId: string,
   status: 'verified' | 'rejected'
 ): Promise<void> {
+  console.log('[updateClaimStatus] claimId:', claimId, 'status:', status, 'timestamp:', Date.now());
   await withDb((db) =>
     update(ref(db, `${CLAIMS_PATH}/${claimId}`), { status, verifiedAt: Date.now() })
   );
+  console.log('[updateClaimStatus] claimId:', claimId, 'updated to status:', status);
 }
 
 export async function closeSession(sessionId: string): Promise<void> {
